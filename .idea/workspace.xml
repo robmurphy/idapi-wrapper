@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5ad4c659-8830-490e-b327-54022fc4dd64" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/idapi-wrapper/lib/activation-1.0.2.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/idapi-wrapper/lib/ant.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/idapi-wrapper/lib/axis.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/idapi-wrapper/lib/com.actuate.idapi.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/idapi-wrapper/lib/com.actuate.idapi_internal.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/idapi-wrapper/lib/commons-discovery-0.2.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/idapi-wrapper/lib/commons-logging.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/idapi-wrapper/lib/jaxrpc.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/idapi-wrapper/lib/log4j-1.2.8.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/idapi-wrapper/lib/mail.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/idapi-wrapper/lib/org.apache.xerces_2.9.0.v201101211617.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/idapi-wrapper/lib/saaj.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/idapi-wrapper/lib/wsdl4j-1.5.1.jar" />
-    </list>
+    <list default="true" id="5ad4c659-8830-490e-b327-54022fc4dd64" name="Default" comment="" />
     <ignored path="IDAPI.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
