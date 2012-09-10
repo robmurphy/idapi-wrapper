@@ -1,0 +1,62 @@
+IDAPI Wrapper for Actuate iServer
+Release Notes
+
+====================
+2012-08-08    1.7.1a
+====================
+- Overloaded FileLister.getFileList to receive an optional FileField parameter to perform the search against
+- Updated IDAPI libraries to Actuate 11SP4 Fix 1 (beta 3)
+
+
+====================
+2011-12-22     1.7.0
+====================
+- Fixed small bug in FileRemover, when trying to delete from root
+- Overloaded Uploader.uploadFileAsStream to take a File or String for the source
+- Refactored VolumeUpload to VolumeUploadSimple (planned Advanced version with XML configuration)
+- Updated VolumeUpload to use uploadFileAsStream instead
+- Refactored VolumeMigrate to VolumeMigrateSimple (planned Advanced version with XML configuration)
+- Finalized VolumeMigrateSimple implementation
+- Fixed BaseController to copy permissions when constructing from another controller
+- Added check to Uploader.uploadFileAsStream to ensure file actually exists, FileNotFoundException thrown otherwise
+- Added JobSearcher class to find completed jobs in the system
+- Added ReportParameterProvider class to find report parameters
+- Updated IDAPI libraries to Actuate 11SP3
+
+
+====================
+2011-07-07    1.6.3a
+====================
+- Fixed indexing problem associated with determining paths when copying
+- Added replaceExisting to the method signature Uploader
+- Alpha release of IDAPI Ant Tasks
+
+
+====================
+2011-07-07    1.6.2a
+====================
+- ALPHA Release - not yet ready
+- Added System Admin functionality
+- Added VolumeAdmin and PartitionAdmin classes under a new "system" package
+- Changed name of linked .jar files to mimic Actuate .jar file names.
+
+
+====================
+2011-05-15     1.6.1
+====================
+- Added VolumeUpdater class.  Allows to update Volume's Resources path
+- Added Default Volume to BaseController.  If you don't specify a volume, the default one will be used
+
+
+====================
+2011-03-25       1.6
+====================
+- Initial release of this file
+- Uploader, now has a new uploadFileAsStream method which can be used to upload large files, streamed directly from disk (no loading in memory first)
+- Authenticator class.  It does nothing, but creates an instance, and logs in
+- FileRemover class.  Use it to delete files (or folders)
+- FolderCreator class. no need to explain
+- FileCopier.  No need to explain
+- FileLister.  Used to get the contents of a folder.
+- Permission system has been added to the entire framework.  Now you can call setPermissions or addPermission on any instance class to set privileges for anything that creates content (SubmitJob, ExecuteReport with save, Upload, CreateFolder, etc).  The syntax for both methods is setPermissions/addPermission(user, role, privilegeString).  Either user or role has to be null.
+- PermissionSetter class.  Besides the new permission system, this one can be used to set permissions on any object.  It also has a setRecursivePermissions method which will recurse a folder.  When setting permissions, you can also opt to add to the existing permissions (default), or replace the permissions

@@ -1,0 +1,22 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="idapi-wrapper-samples-standalone">
+    <output-path>$PROJECT_DIR$/out/artifacts/idapi-wrapper-samples-standalone</output-path>
+    <root id="archive" name="idapi-wrapper-samples-standalone.jar">
+      <element id="module-output" name="idapi-wrapper-samples" />
+      <element id="module-output" name="idapi-wrapper" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/idapi-wrapper/lib/activation-1.0.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/idapi-wrapper/lib/ant.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/idapi-wrapper/lib/axis.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/idapi-wrapper/lib/com.actuate.idapi.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/idapi-wrapper/lib/com.actuate.idapi_internal.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/idapi-wrapper/lib/commons-discovery-0.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/idapi-wrapper/lib/commons-logging.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/idapi-wrapper/lib/jaxrpc.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/idapi-wrapper/lib/log4j-1.2.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/idapi-wrapper/lib/mail.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/idapi-wrapper/lib/org.apache.xerces_2.9.0.v201101211617.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/idapi-wrapper/lib/saaj.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/idapi-wrapper/lib/wsdl4j-1.5.1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

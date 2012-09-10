@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="idapi-wrapper-samples">
+    <output-path>$PROJECT_DIR$/out/artifacts/idapi-wrapper-samples</output-path>
+    <root id="archive" name="idapi-wrapper-samples.jar">
+      <element id="module-output" name="idapi-wrapper-samples" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="IdapiAnt" basedir=".">
+    <taskdef resource="CustomTasks.properties"/>
+    <property name="ServerUrl" value="http://localhost:8000"/>
+    <!-- Optionally you can set the user name and password here.  If set, Input prompts will be ignored. -->
+    <property name="UserName" value="Administrator"/>
+    <!--	<property name="Password" value=""/> -->
+    <property name="Volume" value="Test"/>
+
+    <!-- Used to authenticate into a second server/volume for use with the IdapiVolumeMigrateSimple task. -->
+    <property name="TargetServerUrl" value="http://localhost:8000"/>
+    <property name="TargetUserName" value="Administrator"/>
+    <property name="TargetPassword" value=""/>
+    <property name="TargetVolume" value="test"/>
+
+    <target name="UploadTest">
+        <input message="User Name:  " addproperty="UserName"/>
+        <input message="Password:   " addproperty="Password"/>
+        <IdapiAuthenticate ServerUrl="${ServerUrl}" UserName="${UserName}" Password="${Password}" Volume="${Volume}"
+                           Property="AuthId"/>
+        <IdapiUploader authId="${AuthId}" serverUrl="${ServerUrl}"
+                       sourceFile="C:/workspace/reports/Corporate Report.rptdesign"
+                       destinationFile="/Public/Corporate Report.rptdesign" userPermissions="test1:VRE,test2:V"
+                       rolePermissions="Finance:VREG"/>
+    </target>
+
+    <target name="Authentication">
+        <input message="User Name:  " addproperty="UserName"/>
+        <input message="Password:   " addproperty="Password"/>
+        <IdapiAuthenticate ServerUrl="${ServerUrl}" UserName="${UserName}" Password="${Password}" Volume="${Volume}"
+                           AuthIdProperty="AuthId"/>
+    </target>
+    <target name="Authentication2">
+        <input message="User Name:  " addproperty="UserName"/>
+        <input message="Password:   " addproperty="Password"/>
+        <IdapiAuthenticate ServerUrl="${TargetServerUrl}" UserName="${TargetUserName}" Password="${TargetPassword}"
+                           Volume="${TargetVolume}" AuthIdProperty="TargetAuthId"/>
+    </target>
+
+    <target name="downloadFile" depends="Authentication">
+        <IdapiDownloadFile AuthId="${AuthId}" ServerUrl="${ServerUrl}" SourceFile="/Home/user/My Report.rptdesign"
+                           DestinationFile="C:/MyFolder/My Report.rptdesign"/>
+    </target>
+
+    <target name="downloadUNC" depends="Authentication">
+        <IdapiDownloadFile AuthId="${AuthId}" ServerUrl="${ServerUrl}" SourceFile="/Home/user/My Report.rptdesign"
+                           DestinationFile="\\\\reportserver\\share\\My Report.rptdesign"/>
+    </target>
+
+    <target name="copyFile" depends="Authentication">
+        <IdapiFileCopier AuthId="${AuthId}" ServerUrl="${ServerUrl}" SourceFile="/delete.rptdesign"
+                         DestinationFile="/Public/Test.rptdesign" UserPermissions="test1:VRE,test2:VRE"
+                         RolePermissions="Finance:VRE" ReplacePermissions="false"/>
+    </target>
+
+    <target name="uploadFile" depends="Authentication">
+        <IdapiUploader AuthId="${AuthId}" serverUrl="${ServerUrl}"
+                       sourceFile="C:/workspace/reports/Corporate Report.rptdesign"
+                       destinationFile="/Corporate Report.rptdesign" rolePermissions="All:VRE"/>
+    </target>
+
+    <target name="volumeDownload" depends="Authentication">
+        <IdapiVolumeDownload AuthId="${AuthId}" ServerUrl="${ServerUrl}" SourcePath="/Public"
+                             TargetPath="C:/MyEnycDownloadDir" DeleteFirst="true"/>
+    </target>
+
+    <target name="volumeMigrate" depends="Authentication,Authentication2">
+        <IdapiVolumeMigrateSimple SourceAuthId="${AuthId}" SourceServerUrl="${ServerUrl}" SourcePath="/"
+                                  TargetAuthId="${TargetAuthId}" TargetServerUrl="${TargetServerUrl}" TargetPath="/"
+                                  CopyPermissions="false" DeleteFirst="true"/>
+    </target>
+
+    <target name="VolumeUpload" depends="Authentication">
+        <IdapiVolumeUploadSimple AuthId="${AuthId}" ServerUrl="${ServerUrl}" SourcePath="C:/workspace/reports/Test"
+                                 TargetPath="/Test" DeleteFirst="true" RolePermissions="All:VRE" Recursive="true"/>
+    </target>
+
+</project>

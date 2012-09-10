@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="idapi-wrapper-ant">
+    <output-path>$PROJECT_DIR$/out/artifacts/idapi-wrapper-ant</output-path>
+    <root id="archive" name="idapi-wrapper-ant.jar">
+      <element id="module-output" name="idapi-wrapper" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/idapi-wrapper/lib/ant.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

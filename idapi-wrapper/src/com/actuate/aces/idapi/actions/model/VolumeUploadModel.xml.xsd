@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="permission-rules">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="permission-rule" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="volume-upload-model">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="filters" minOccurs="0"/>
+                <xs:element ref="permission-rules" minOccurs="0"/>
+                <xs:element ref="folder-rules" minOccurs="0"/>
+                <xs:element ref="file-rules" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="include-filter" type="xs:string"/>
+    <xs:element name="file-rules">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="file-rule" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="permission">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute type="xs:string" name="user" use="optional"/>
+                    <xs:attribute type="xs:string" name="rights" use="optional"/>
+                    <xs:attribute type="xs:string" name="role" use="optional"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="exclude-filter" type="xs:string"/>
+    <xs:element name="folder-rules">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="folder-rule" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="permission-rule">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="permissions"/>
+            </xs:sequence>
+            <xs:attribute type="xs:string" name="name" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="exclude-filters">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="exclude-filter" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="include-filters">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="include-filter" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="permissions">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="permission" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="folder-rule">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="permissions"/>
+            </xs:sequence>
+            <xs:attribute type="xs:string" name="name" use="optional"/>
+            <xs:attribute type="xs:string" name="ignore" use="optional"/>
+            <xs:attribute type="xs:string" name="includeSub" use="optional"/>
+            <xs:attribute type="xs:string" name="cascadePermissions" use="optional"/>
+            <xs:attribute type="xs:string" name="permissionRule" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="file-rule">
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:element ref="permissions" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute type="xs:string" name="name" use="optional"/>
+            <xs:attribute type="xs:string" name="permissionRule" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="filters">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="include-filters" minOccurs="0"/>
+                <xs:element ref="exclude-filters" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
