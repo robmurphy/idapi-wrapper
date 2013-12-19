@@ -6,15 +6,14 @@ import com.actuate.aces.idapi.actions.VolumeUploadSimple;
 import com.actuate.aces.idapi.actions.model.VolumeUploadModel;
 import com.actuate.aces.idapi.control.ActuateException;
 import com.actuate.aces.idapi.system.VolumeAdmin;
-import com.actuate.schemas.ExecuteReportStatus;
-import com.actuate.schemas.File;
-import com.actuate.schemas.JobProperties;
-import com.actuate.schemas.ParameterDefinition;
+import com.actuate.schemas.*;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.rpc.ServiceException;
+import javax.xml.soap.SOAPException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
@@ -25,9 +24,14 @@ import java.util.HashMap;
 
 public class Tester {
 
+	static String host = "http://vm-nitrous:8000";
+	static String username = "Administrator";
+	static String password = "";
+	static String volume = "ActuateOne";
 
-	public static void main(String[] args) throws IOException, ActuateException, ServiceException {
+	public static void main(String[] args) throws IOException, ActuateException, ServiceException, SOAPException {
 
+		executeReportAndExtractData();
 		//executeReportAndSaveToDisk();
 		//exportReportAndSaveToDisk();
 		//downloadFile();
@@ -40,16 +44,12 @@ public class Tester {
 		//volumeOfflineOnline("actuate", "ActuateOne");
 		//getJobsForReport("/Resources/Classic Models.datadesign");
 		//getReportParameters("/Ad-Hoc Mashup.rptdesign");
-		scheduleJob();
+		//scheduleJob();
 
 		System.exit(0);
 	}
 
 	private static void scheduleJob() throws MalformedURLException, ActuateException, ServiceException {
-		String host = "http://vm-nitrous:8000";
-		String username = "Administrator";
-		String password = "";
-		String volume = "ActuateOne";
 
 		String executableName = "/Public/BIRT and BIRT Studio Examples/Customer Order History.rptdesign";
 		String outputName = "/My Output.rptdocument";
@@ -62,10 +62,6 @@ public class Tester {
 	}
 
 	private static void getReportParameters(String reportName) throws MalformedURLException, ActuateException, ServiceException {
-		String host = "http://vm-nitrous:8000";
-		String username = "Administrator";
-		String password = "";
-		String volume = "ActuateOne";
 
 		ReportParameterProvider test = new ReportParameterProvider(host, username, password, volume);
 		ArrayList<ParameterDefinition> params = test.getParameters("/Ad-Hoc Mashup.rptdesign;1");
@@ -76,10 +72,6 @@ public class Tester {
 
 
 	private static void getJobsForReport(String reportName) throws MalformedURLException, ActuateException, ServiceException {
-		String host = "http://vm-nitrous:8000";
-		String username = "Administrator";
-		String password = "";
-		String volume = "ActuateOne";
 
 		JobSearcher jobSearcher = new JobSearcher(host, username, password, volume);
 		ArrayList<JobProperties> jobPropertiesList = jobSearcher.getJobs(reportName);
@@ -89,7 +81,6 @@ public class Tester {
 	}
 
 	private static void volumeOfflineOnline(String systemPassword, String volumeName) throws ServiceException, ActuateException, MalformedURLException {
-		String host = "http://localhost:8000";
 
 		// Initialize com.actuate.aces.idapi.system.VolumeAdmin class with iServer SOAP Endpoint
 		VolumeAdmin volumeAdmin = new VolumeAdmin(host);
@@ -106,10 +97,6 @@ public class Tester {
 
 
 	private static void volumeUpload() throws IOException, ActuateException, ServiceException {
-		String host = "http://localhost:8000";
-		String username = "Administrator";
-		String password = "";
-		String volume = "ActuteOne";
 
 		try {
 
@@ -142,34 +129,18 @@ public class Tester {
 	}
 
 	private static void uploadEntireFolder() throws IOException, ActuateException, ServiceException {
-		String host = "http://localhost:8000";
-		String username = "Administrator";
-		String password = "";
-		String volume = "Test";
-
 		VolumeUploadSimple volumeUpload = new VolumeUploadSimple(host, username, password, volume);
 		volumeUpload.upload("C:/DownloadTest", "/", true);
 	}
 
 	private static void downloadEntireFolder() throws IOException, ActuateException, ServiceException {
-		String host = "http://localhost:8000";
-		String username = "Administrator";
-		String password = "";
-		String volume = "ActuateOne";
-
 		VolumeDownload volumeDownload = new VolumeDownload(host, username, password, volume);
 		volumeDownload.download("/", "C:/DownloadTest", true);
-
 	}
 
 	private static void listAllFiles() throws MalformedURLException, ActuateException, ServiceException {
-		String host = "http://localhost:8000";
-		String username = "Administrator";
-		String password = "";
-		String volume = "ActuateOne";
-
 		FileLister fileLister = new FileLister(host, username, password, volume);
-		doListFiles(fileLister, "/home/Administrator", ">  \"2012-07-11T00:44:00\"");
+		doListFiles(fileLister, "/", null);
 	}
 
 	private static void doListFiles(FileLister fileLister, String folder, String pattern) {
@@ -189,37 +160,45 @@ public class Tester {
 		}
 	}
 
-	private static void executeReportAndSaveToDisk() throws IOException, ActuateException, ServiceException {
-
-		String host = "http://localhost:8000";
-		String username = "Administrator";
-		String password = "";
-		String volume = "ActuateOne";
+	private static void executeReportAndExtractData() throws IOException, ActuateException, ServiceException, SOAPException {
 
 		ReportExecuter reportExecuter = new ReportExecuter(host, username, password, volume);
 		String objId = reportExecuter.executeReport("/Public/BIRT and BIRT Studio Examples/Sales by Employee.rptdesign");
 
-		JavaReportViewer javaReportViewer = new JavaReportViewer(reportExecuter);
-		javaReportViewer.viewToFile("/$$$Transient/" + objId + ".rptdocument", "PDF", "C:\\TestReport.pdf");
+		DataExtractor dataExtractor = new DataExtractor(reportExecuter);
+		String sourceFile = "/$$$Transient/" + objId + ".rptdocument";
+		// Use the second exportable data set.
+		ResultSetSchema resultSetSchema = dataExtractor.getAllMetaData(sourceFile)[1];
+		String tableName = resultSetSchema.getResultSetName();
+		String[] columns = dataExtractor.getColumnsFromSchema(resultSetSchema);
+
+		// All of these are optional, and will have default values hardcoded in task class
+		HashMap<String, String> outputProps = new HashMap<String, String>();
+		outputProps.put("BIRTDataExtractionEncoding", "utf-8");
+		outputProps.put("BIRTDataExtractionLocaleNeutralFormat", "true");
+		outputProps.put("Locale", "en_US");
+		outputProps.put("BIRTExportDataType", "true");
+		outputProps.put("BIRTDataExtractionSep", "@");
+
+		FileOutputStream outputStream = new FileOutputStream("/Users/pierretessier/Desktop/Test.asv");
+		dataExtractor.extractToStream(sourceFile, tableName, columns, outputStream, outputProps);
+	}
+
+	private static void executeReportAndSaveToDisk() throws IOException, ActuateException, ServiceException {
+
+		ReportExecuter reportExecuter = new ReportExecuter(host, username, password, volume);
+		String objId = reportExecuter.executeReport("/Public/BIRT and BIRT Studio Examples/Sales by Employee.rptdesign");
+
+		BIRTContentViewer birtContentViewer = new BIRTContentViewer(reportExecuter);
+		birtContentViewer.viewToFile("/$$$Transient/" + objId + ".rptdocument", "PDF", "/Users/pierretessier/Desktop/TestReport.pdf");
 	}
 
 	private static void exportReportAndSaveToDisk() throws IOException, ActuateException, ServiceException {
-
-		String host = "http://localhost:8000";
-		String username = "Administrator";
-		String password = "";
-		String volume = "ActuateOne";
-
-		JavaReportViewer javaReportViewer = new JavaReportViewer(host, username, password, volume);
-		javaReportViewer.viewToFile("/home/Administrator/Customer Dashboard.rptdocument", "PDF", "/Users/pierretessier/TestReport.pdf");
+		BIRTContentViewer birtContentViewer = new BIRTContentViewer(host, username, password, volume);
+		birtContentViewer.viewToFile("/home/Administrator/Customer Dashboard.rptdocument", "PDF", "/Users/pierretessier/TestReport.pdf");
 	}
 
 	private static void executeReportTest(int mode, boolean open) throws MalformedURLException, ActuateException, ServiceException, UnsupportedEncodingException {
-
-		String host = "http://localhost:8001";
-		String username = "Administrator";
-		String password = "";
-		String volume = "ActuateOne";
 
 		String viewURL = "http://localhost:8700/iportal/";
 
@@ -277,27 +256,14 @@ public class Tester {
 	}
 
 	private static void downloadFile() throws IOException, ActuateException, ServiceException {
-
-		String host = "http://localhost:8000";
-		String username = "Administrator";
-		String password = "";
-		String volume = "ActuateOne";
-
 		Downloader downloader = new Downloader(host, username, password, volume);
 		downloader.downloadToFile("/Customer Dashboard.pdf", "C:\\Test Report.pdf");
 	}
 
 	private static void setPermissionsRecursively() throws MalformedURLException, ActuateException, ServiceException {
-
-		String host = "http://localhost:8000";
-		String username = "Administrator";
-		String password = "";
-		String volume = "ActuateOne";
-
 		PermissionSetter permissionSetter = new PermissionSetter(host, username, password, volume);
 		permissionSetter.addPermission(null, "TestRole", "VR");
 		permissionSetter.setRecursivePermissions("/Temp1", true);
-
 	}
 
 	private static void openURL(String url) {

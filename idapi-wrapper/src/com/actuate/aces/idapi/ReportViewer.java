@@ -12,8 +12,8 @@ import java.util.Iterator;
 
 public class ReportViewer extends BaseController {
 
-	public ReportViewer(BaseController helper) {
-		super(helper);
+	public ReportViewer(BaseController controller) {
+		super(controller);
 	}
 
 	public ReportViewer(String host, String authenticationId) throws MalformedURLException, ServiceException {

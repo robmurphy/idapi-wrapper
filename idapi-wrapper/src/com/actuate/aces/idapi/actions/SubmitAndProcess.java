@@ -111,10 +111,10 @@ public class SubmitAndProcess extends BaseController {
 		if (state == null) {
 			return false;
 		} else if (state.equals("Succeeded")) {
-			JavaReportViewer javaReportViewer = new JavaReportViewer(jobState);
+			BIRTContentViewer birtContentViewer = new BIRTContentViewer(jobState);
 			needsReset = true;
 			try {
-				javaReportViewer.viewToFile(outputName, viewFormat, viewFileName);
+				birtContentViewer.viewToFile(outputName, viewFormat, viewFileName);
 			} catch (IOException e) {
 				e.printStackTrace();
 				return false;

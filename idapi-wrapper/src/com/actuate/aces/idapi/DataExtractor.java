@@ -78,6 +78,10 @@ public class DataExtractor extends BaseController {
 			return response.getArrayOfResultSetSchema().getResultSetSchema();
 	}
 
+	public void extractToStream(String sourceFile, OutputStream outputStream) throws IOException, SOAPException {
+		extractToStream(sourceFile, getMetaData(sourceFile), outputStream);
+	}
+
 	public void extractToStream(String sourceFile, ResultSetSchema resultSetSchema, OutputStream outputStream) throws IOException, SOAPException {
 		String tableName = resultSetSchema.getResultSetName();
 		String[] columns = getColumnsFromSchema(resultSetSchema);
@@ -89,6 +93,10 @@ public class DataExtractor extends BaseController {
 	}
 
 	public void extractToStream(String sourceFile, String tableName, String[] columnNames, OutputStream outputStream) throws IOException, SOAPException {
+		extractToStream(sourceFile, tableName, columnNames, outputStream, null);
+	}
+
+	public void extractToStream(String sourceFile, String tableName, String[] columnNames, OutputStream outputStream, HashMap<String, String> defaultProps) throws IOException, SOAPException {
 
 		DataExtraction dataExtraction = new DataExtraction();
 
@@ -109,6 +117,9 @@ public class DataExtractor extends BaseController {
 		props.put("Locale", "en_US");
 		props.put("BIRTExportDataType", "false");
 		props.put("BIRTDataExtractionSep", ",");
+		if (defaultProps != null)
+			props.putAll(defaultProps);
+
 		NameValuePair[] properties = getNameValuePairsFromMap(null, props);
 		ArrayOfNameValuePair propertyValues = new ArrayOfNameValuePair();
 		propertyValues.setNameValuePair(properties);
@@ -116,7 +127,9 @@ public class DataExtractor extends BaseController {
 
 		dataExtraction.setColumns(new ArrayOfString(columnNames));
 
+		acxControl.actuateAPI.setFileType(sourceFile.substring(sourceFile.lastIndexOf(".") + 1));
 		acxControl.proxy.dataExtraction(dataExtraction);
+		acxControl.actuateAPI.setFileType(null);
 
 		Iterator iter = acxControl.actuateAPI.getCall().getMessageContext().getResponseMessage().getAttachments();
 		while (iter.hasNext()) {
@@ -126,7 +139,11 @@ public class DataExtractor extends BaseController {
 		}
 	}
 
-	public java.io.File extractToFile(String sourceFile, ResultSetSchema resultSetSchema, String destinationFile) throws IOException, SOAPException {
+	public java.io.File extractToFile(String sourceFile, String destinationFile) throws IOException {
+		return extractToFile(sourceFile, getMetaData(sourceFile), destinationFile);
+	}
+
+	public java.io.File extractToFile(String sourceFile, ResultSetSchema resultSetSchema, String destinationFile) throws IOException {
 		String tableName = resultSetSchema.getResultSetName();
 		String[] columns = getColumnsFromSchema(resultSetSchema);
 		return extractToFile(sourceFile, tableName, columns, destinationFile);
@@ -148,17 +165,17 @@ public class DataExtractor extends BaseController {
 		return file;
 	}
 
-	public InputStream getExtractStream(String sourceFile, ResultSetSchema resultSetSchema) {
+	public InputStream getExtractStream(String sourceFile, ResultSetSchema resultSetSchema) throws SOAPException {
 		String tableName = resultSetSchema.getResultSetName();
 		String[] columns = getColumnsFromSchema(resultSetSchema);
 		return getExtractStream(sourceFile, tableName, columns);
 	}
 
-	public InputStream getExtractStream(String sourceFile, String tableName, String columnNames) {
+	public InputStream getExtractStream(String sourceFile, String tableName, String columnNames) throws SOAPException {
 		return getExtractStream(sourceFile, tableName, columnNames.split(","));
 	}
 
-	public InputStream getExtractStream(String sourceFile, String tableName, String[] columnNames) {
+	public InputStream getExtractStream(String sourceFile, String tableName, String[] columnNames) throws SOAPException {
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			extractToStream(sourceFile, tableName, columnNames, baos);
@@ -166,13 +183,10 @@ public class DataExtractor extends BaseController {
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
-		} catch (SOAPException e) {
-			e.printStackTrace();
-			return null;
 		}
 	}
 
-	private String[] getColumnsFromSchema(ResultSetSchema resultSetSchema) {
+	public String[] getColumnsFromSchema(ResultSetSchema resultSetSchema) {
 		ColumnSchema[] columnSchemas = resultSetSchema.getArrayOfColumnSchema().getColumnSchema();
 		String[] columns = new String[columnSchemas.length];
 		for (int i = 0; i < columnSchemas.length; i++) {

@@ -11,6 +11,10 @@ import java.util.Map;
 
 public class ReportExecuter extends BaseController {
 
+	// Used when looping to check for report execution to end.  checkForStatus
+	// Not final, so value can be changed in implementation
+	public static long DEFAULT_SLEEP_TIME = 250;
+
 	private ExecuteReportStatus lastStatus = ExecuteReportStatus.Pending;
 
 	public ReportExecuter(BaseController controller) {
@@ -118,6 +122,11 @@ public class ReportExecuter extends BaseController {
 		}
 
 		lastStatus = ExecuteReportStatus.fromValue(response.getStatus());
+		try {
+			Thread.sleep(DEFAULT_SLEEP_TIME);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		return checkForStatus(objectId, statusWait);
 	}
 }
