@@ -5,6 +5,9 @@ import com.actuate.aces.idapi.control.ActuateException;
 import javax.xml.rpc.ServiceException;
 import java.net.MalformedURLException;
 
+/**
+ * @deprecated This class is being replaced by the BIRTContentViewer class, which is more appropriately named
+ */
 @Deprecated
 public class JavaReportViewer extends BIRTContentViewer {
 	public JavaReportViewer(BaseController controller) {
