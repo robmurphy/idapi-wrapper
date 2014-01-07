@@ -28,6 +28,7 @@ public class DBTest {
 			call.setTargetEndpointAddress(serverURL);
 			ActuateSoapPort proxy = actuateAPI.getActuateSoapPort(new URL(serverURL));
 
+			//TODO: From Actuate: The next 2 lines of code don't do anything and should not be here
 			GetSystemVolumeNames gsvn = new GetSystemVolumeNames();
 			gsvn.setOnlineOnly(true);
 
@@ -45,12 +46,14 @@ public class DBTest {
 			executeReport.setInputFileName(reportFile);
 			executeReport.setSaveOutputFile(Boolean.FALSE);
 			executeReport.setProgressiveViewing(Boolean.FALSE);
-			//TODO: Do Parameter Handling here
+			//TODO: From Actuate: Do Parameter Handling here
 			//executeReport.setParameterValues(params.toArrayOfParameterValue());
 
 			ExecuteReportResponse reportResponse = proxy.executeReport(executeReport);
 			if (reportResponse.getStatus().equals(ExecuteReportStatus.Done)) {
 				actuateAPI.setConnectionHandle(reportResponse.getConnectionHandle());
+
+
 				ObjectIdentifier objectIdentifier = new ObjectIdentifier();
 				objectIdentifier.setId(reportResponse.getObjectId());
 				objectIdentifier.setType("rptdocument");

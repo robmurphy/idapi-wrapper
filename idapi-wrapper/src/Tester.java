@@ -163,24 +163,26 @@ public class Tester {
 	private static void executeReportAndExtractData() throws IOException, ActuateException, ServiceException, SOAPException {
 
 		ReportExecuter reportExecuter = new ReportExecuter(host, username, password, volume);
+		//TODO: The following line can also accept optional report parameters.  Look at ReportExecuter class for more info
 		String objId = reportExecuter.executeReport("/Public/BIRT and BIRT Studio Examples/Sales by Employee.rptdesign");
 
 		DataExtractor dataExtractor = new DataExtractor(reportExecuter);
 		String sourceFile = "/$$$Transient/" + objId + ".rptdocument";
-		// Use the second exportable data set.
+		//TODO: In this sample we always target the 2nd exportable data set.  Some reports may differ here, depending on how they are designed
 		ResultSetSchema resultSetSchema = dataExtractor.getAllMetaData(sourceFile)[1];
 		String tableName = resultSetSchema.getResultSetName();
 		String[] columns = dataExtractor.getColumnsFromSchema(resultSetSchema);
 
-		// All of these are optional, and will have default values hardcoded in task class
+		//TODO: All of these are optional, and will have default values hardcoded in task class
 		HashMap<String, String> outputProps = new HashMap<String, String>();
 		outputProps.put("BIRTDataExtractionEncoding", "utf-8");
 		outputProps.put("BIRTDataExtractionLocaleNeutralFormat", "true");
 		outputProps.put("Locale", "en_US");
 		outputProps.put("BIRTExportDataType", "true");
-		outputProps.put("BIRTDataExtractionSep", "@");
+		outputProps.put("BIRTDataExtractionSep", "|");
 
-		FileOutputStream outputStream = new FileOutputStream("/Users/pierretessier/Desktop/Test.asv");
+		//TODO: Change the following line to generate output based on your system
+		FileOutputStream outputStream = new FileOutputStream("/Users/pierretessier/Desktop/Test.psv");
 		dataExtractor.extractToStream(sourceFile, tableName, columns, outputStream, outputProps);
 	}
 

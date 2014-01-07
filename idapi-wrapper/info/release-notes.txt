@@ -2,6 +2,21 @@ IDAPI Wrapper for Actuate iServer
 Release Notes
 
 ====================
+2013-12-17     1.8.0
+====================
+- Updated Data Extractor class making result schema discovery public
+- Overloaded Data Extractor class to also accept optional data extraction parameters
+- Deprecated JavaReportViewer class in favor of BIRTContentViewer class (new)
+- This will be the final release before being forked into iHub and iServer branches
+
+
+====================
+2013-01-13     1.7.1
+====================
+- Updated IDAPI libraries to Actuate 11SP4 Fix 1 (final)
+
+
+====================
 2012-08-08    1.7.1a
 ====================
 - Overloaded FileLister.getFileList to receive an optional FileField parameter to perform the search against
