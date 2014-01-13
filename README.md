@@ -46,8 +46,7 @@ Tester class includes many test cases, and reference implementations.
 
 ## Contributors
 
-Pierre Tessier - Actuate Corporation - Project Lead
-
+Pierre Tessier - Actuate Corporation - Project Lead  
 Rob Murphy - Actuate Corporation - Lead Developer
 
 ## License
