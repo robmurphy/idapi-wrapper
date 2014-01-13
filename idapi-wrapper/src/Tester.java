@@ -24,19 +24,20 @@ import java.util.HashMap;
 
 public class Tester {
 
-	static String host = "http://vm-nitrous:8000";
+	static String host = "http://localhost:8000";
 	static String username = "Administrator";
 	static String password = "";
-	static String volume = "ActuateOne";
+	static String volume = "Default Volume";
 
 	public static void main(String[] args) throws IOException, ActuateException, ServiceException, SOAPException {
 
-		executeReportAndExtractData();
+		//executeReportAndExtractData();
 		//executeReportAndSaveToDisk();
 		//exportReportAndSaveToDisk();
 		//downloadFile();
-		//executeReportTest(5, true);
+		executeReportTest(5, true);
 		//listAllFiles();
+		listAllFilesAndPermissions();
 		//downloadEntireFolder();
 		//uploadEntireFolder();
 		//migrateFolder();
@@ -156,6 +157,45 @@ public class Tester {
 					System.out.println(folder + file.getName());
 				else
 					System.out.println(folder + "/" + file.getName());
+			}
+		}
+	}
+
+	private static void listAllFilesAndPermissions() throws MalformedURLException, ActuateException, ServiceException {
+		FileLister fileLister = new FileLister(host, username, password, volume);
+		doListFilesAndPermissions(fileLister, "/", null);
+	}
+
+	private static void doListFilesAndPermissions(FileLister fileLister, String folder, String pattern) {
+		ArrayList<File> files = fileLister.getFileList(folder, pattern);
+		for (File file : files) {
+			if (file.getFileType().equalsIgnoreCase("directory")) {
+				if (folder.equals("/"))
+					doListFilesAndPermissions(fileLister, folder + file.getName(), pattern);
+				else
+					doListFilesAndPermissions(fileLister, folder + "/" + file.getName(), pattern);
+			} else {
+				String fullName;
+				if (folder.equals("/"))
+					fullName = folder + file.getName();
+				else
+					fullName = folder + "/" + file.getName();
+
+				System.out.println(fullName);
+				ArrayOfPermission permissions = new PermissionGetter(fileLister).getPermissions(fullName);
+				if (permissions.getPermission() == null) {
+					System.out.println("\tNO PERMISSIONS");
+				} else {
+					for (Permission permission : permissions.getPermission()) {
+						String output = "";
+						if (permission.getUserName() != null)
+							output += "User: " + permission.getUserName();
+						else
+							output += "Role: " + permission.getRoleName();
+						output += " -- " + permission.getAccessRight();
+						System.out.println("\t" + output);
+					}
+				}
 			}
 		}
 	}
