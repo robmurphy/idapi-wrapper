@@ -1,5 +1,7 @@
 <component name="CopyrightManager">
-  <settings default="">
-    <module2copyright />
+  <settings default="idapi-wrapper">
+    <module2copyright>
+      <element module="Project Files" copyright="idapi-wrapper" />
+    </module2copyright>
   </settings>
 </component>

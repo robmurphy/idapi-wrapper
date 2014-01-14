@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2014 Actuate Corporation
+ */
+
 package com.actuate.aces.idapi.samples;
 
 import com.actuate.aces.idapi.Authenticator;

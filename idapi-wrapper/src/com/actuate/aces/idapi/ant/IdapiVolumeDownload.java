@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2014 Actuate Corporation
+ */
+
 package com.actuate.aces.idapi.ant;
 
 import com.actuate.aces.idapi.actions.VolumeDownload;
