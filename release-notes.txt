@@ -1,5 +1,13 @@
-IDAPI Wrapper for Actuate iServer
+IDAPI Wrapper for Actuate iHub
 Release Notes
+
+====================
+2014-01-13     1.8.1
+====================
+- Added reference inline class sample
+- Updated JobState to use SelectJobs instead of GetJobDetails.
+- Updated JobState to work with an array of Job Ids, and return status of multiple jobs.
+
 
 ====================
 2013-12-17     1.8.0

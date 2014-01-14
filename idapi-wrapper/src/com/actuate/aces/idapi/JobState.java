@@ -1,10 +1,7 @@
 package com.actuate.aces.idapi;
 
 import com.actuate.aces.idapi.control.ActuateException;
-import com.actuate.schemas.ArrayOfString;
-import com.actuate.schemas.GetJobDetails;
-import com.actuate.schemas.GetJobDetailsResponse;
-import com.actuate.schemas.JobPropertiesState;
+import com.actuate.schemas.*;
 
 import javax.xml.rpc.ServiceException;
 import java.net.MalformedURLException;
@@ -27,23 +24,51 @@ public class JobState extends BaseController {
 		super(host, username, password, volume, extendedCredentials);
 	}
 
-	public JobPropertiesState getJobState(String jobId) {
-		GetJobDetails getJobDetails = new GetJobDetails();
-		getJobDetails.setJobId(jobId);
-		getJobDetails.setResultDef(new ArrayOfString(new String[]{"JobAttributes"}));
+	public JobPropertiesState[] getJobState(String[] jobIds) {
+		SelectJobs selectJobs = new SelectJobs();
+		selectJobs.setIdList(new ArrayOfString(jobIds));
+		selectJobs.setResultDef(new ArrayOfString(new String[]{"state"}));
 
-		GetJobDetailsResponse response;
+		SelectJobsResponse response;
 		try {
-			response = acxControl.proxy.getJobDetails(getJobDetails);
+			response = acxControl.proxy.selectJobs(selectJobs);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 			return null;
 		}
 
-		return response.getJobAttributes().getState();
+		JobProperties[] jobProperties = response.getJobs().getJobProperties();
+		if (jobProperties == null)
+			return null;
+
+		JobPropertiesState[] jobPropertiesStates = new JobPropertiesState[jobProperties.length];
+		for (int i = 0; i < jobProperties.length; i++) {
+			jobPropertiesStates[i] = jobProperties[i].getState();
+		}
+
+		return jobPropertiesStates;
 	}
 
-	public String getJobStateStrign(String jobId) {
+	public JobPropertiesState getJobState(String jobId) {
+		SelectJobs selectJobs = new SelectJobs();
+		selectJobs.setId(jobId);
+		selectJobs.setResultDef(new ArrayOfString(new String[]{"state"}));
+
+		SelectJobsResponse response;
+		try {
+			response = acxControl.proxy.selectJobs(selectJobs);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		if (response.getJobs().getJobProperties() == null)
+			return null;
+
+		return response.getJobs().getJobProperties()[0].getState();
+	}
+
+	public String getJobStateString(String jobId) {
 		JobPropertiesState state = getJobState(jobId);
 		if (state == null)
 			return null;

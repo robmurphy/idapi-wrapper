@@ -19,6 +19,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -35,9 +36,9 @@ public class Tester {
 		//executeReportAndSaveToDisk();
 		//exportReportAndSaveToDisk();
 		//downloadFile();
-		executeReportTest(5, true);
+		//executeReportTest(5, true);
 		//listAllFiles();
-		listAllFilesAndPermissions();
+		//listAllFilesAndPermissions();
 		//downloadEntireFolder();
 		//uploadEntireFolder();
 		//migrateFolder();
@@ -46,8 +47,52 @@ public class Tester {
 		//getJobsForReport("/Resources/Classic Models.datadesign");
 		//getReportParameters("/Ad-Hoc Mashup.rptdesign");
 		//scheduleJob();
+		inlineTask();
 
 		System.exit(0);
+	}
+
+	private static void inlineTask() throws MalformedURLException, ActuateException, ServiceException {
+		String executableName = "/Public/BIRT and BIRT Studio Examples/Customer Order History.rptdesign";
+		String outputName = "/My Output.rptdocument";
+		HashMap<String, String> parameters = new HashMap<String, String>();
+		parameters.put("Customer", "Alpha Cognac");
+
+		JobScheduler jobScheduler = new JobScheduler(host, username, password, volume);
+		String jobId1 = jobScheduler.scheduleJob("TEST JOB", executableName, outputName, null, parameters);
+		String jobId2 = jobScheduler.scheduleJob("Testing 123", executableName, outputName, null, parameters);
+		System.out.println("jobIds = " + jobId1 + " -- " + jobId2);
+
+		long sleep = 0;
+		sleep = 10000;
+		try {
+			Thread.sleep(sleep);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		new BaseController(jobScheduler) {
+			public void doInline(String[] jobs) {
+				SelectJobs selectJobs = new SelectJobs();
+				selectJobs.setIdList(new ArrayOfString(jobs));
+				selectJobs.setResultDef(new ArrayOfString(new String[]{"jobName", "state"}));
+
+				SelectJobsResponse response;
+				try {
+					response = acxControl.proxy.selectJobs(selectJobs);
+				} catch (RemoteException e) {
+					e.printStackTrace();
+					return;
+				}
+
+				for (JobProperties props : response.getJobs().getJobProperties()) {
+					System.out.println(props.getJobId() + " -- " + props.getJobName() + " -- " + props.getState().getValue());
+				}
+
+
+				//TODO: Implement something here, all BaseController properties are available
+			}
+		}.doInline(new String[]{jobId1, jobId2});
 	}
 
 	private static void scheduleJob() throws MalformedURLException, ActuateException, ServiceException {
