@@ -1,3 +1,7 @@
+<!--
+  ~ Copyright (c) 2014 Actuate Corporation
+  -->
+
 <volume-upload-model>
     <filters includeAllFolders="true">
         <include-filters>
