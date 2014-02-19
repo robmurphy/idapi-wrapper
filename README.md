@@ -37,8 +37,7 @@ Include in your Java project.  All libraries (.jar) referenced by project must b
 
 ## API Reference
 
-Please refer to Actuate Information Delivery API reference docs
-
+Please refer to Actuate Information Delivery API reference docs 
 //TODO: include link to online javadoc for IDAPI
 
 ## Tests
@@ -52,5 +51,5 @@ Rob Murphy - Actuate Corporation - Lead Developer
 
 ## License
 
-IDAPI-wrapper is licensed under the Eclipse Public License v1.0
+IDAPI-wrapper is licensed under the Eclipse Public License v1.0 
 http://www.eclipse.org/legal/epl-v10.html
