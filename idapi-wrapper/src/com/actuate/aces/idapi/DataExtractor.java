@@ -65,7 +65,8 @@ public class DataExtractor extends BaseController {
 		objectIdentifier.setType(sourceFile.substring(sourceFile.lastIndexOf(".") + 1));
 		getMetaData.setObject(objectIdentifier);
 
-		acxControl.setSOAPHeader("Type", sourceFile.substring(sourceFile.lastIndexOf(".") + 1));
+		acxControl.setFileType(sourceFile.substring(sourceFile.lastIndexOf(".") + 1));
+		//acxControl.setSOAPHeader("Type", );
 		GetMetaDataResponse response = null;
 		try {
 			response = acxControl.proxy.getMetaData(getMetaData);
@@ -73,7 +74,8 @@ public class DataExtractor extends BaseController {
 			e.printStackTrace();
 			return null;
 		} finally {
-			acxControl.removeSOAPHeader("Type");
+			//acxControl.removeSOAPHeader("Type");
+			acxControl.setFileType(null);
 		}
 
 		if (response.getArrayOfResultSetSchema() == null)
@@ -131,9 +133,9 @@ public class DataExtractor extends BaseController {
 
 		dataExtraction.setColumns(new ArrayOfString(columnNames));
 
-		acxControl.actuateAPI.setFileType(sourceFile.substring(sourceFile.lastIndexOf(".") + 1));
+		acxControl.setFileType(sourceFile.substring(sourceFile.lastIndexOf(".") + 1));
 		acxControl.proxy.dataExtraction(dataExtraction);
-		acxControl.actuateAPI.setFileType(null);
+		acxControl.setFileType(null);
 
 		Iterator iter = acxControl.actuateAPI.getCall().getMessageContext().getResponseMessage().getAttachments();
 		while (iter.hasNext()) {

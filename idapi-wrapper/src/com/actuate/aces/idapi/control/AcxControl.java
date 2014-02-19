@@ -17,13 +17,24 @@ import java.util.ArrayList;
 
 public class AcxControl {
 
-	public static final String NAMESPACE = "http://schemas.actuate.com/actuate" + VersionInfo.ACTUATE_MAJOR_VERSION;
+	public static final String NAMESPACE = "http://schemas.actuate.com/actuate" + VersionInfo.IDAPI_NAMESPACE_VERSION;
+
+	private static final long AUTHENTICATION_TIMEOUT = 23 * 60 * 60 * 1000; // 23 HOURS;
 
 	// control variables
 	private String username = "Administrator";
 	private String password = "";
 	private String actuateServerURL = "http://localhost:8000/";
 	private byte[] extendedCredentials = null;
+	private String systemPassword = null;
+
+	private long authenticationTime = 0;
+	private String authenticationId = null;
+	private String connectionHandle = null;
+	private String locale = "en_US";
+	private String targetVolume = null;
+	private Boolean delayFlush = null;
+	private String fileType = null;
 
 	// proxy operation
 	public ActuateSoapBindingStub proxy;
@@ -32,14 +43,14 @@ public class AcxControl {
 	public ActuateAPIInternalEx actuateAPIInternal;
 
 	public AcxControl() throws MalformedURLException, ServiceException {
-		actuateAPI = new ActuateAPILocatorEx();
-		actuateAPIInternal = new ActuateAPIInternalLocatorEx();
+		actuateAPI = new ActuateAPILocatorEx(this);
+		actuateAPIInternal = new ActuateAPIInternalLocatorEx(this);
 		setActuateServerURL(actuateServerURL);
 	}
 
 	public AcxControl(String serverURL) throws MalformedURLException, ServiceException {
-		actuateAPI = new ActuateAPILocatorEx();
-		actuateAPIInternal = new ActuateAPIInternalLocatorEx();
+		actuateAPI = new ActuateAPILocatorEx(this);
+		actuateAPIInternal = new ActuateAPIInternalLocatorEx(this);
 		setActuateServerURL(serverURL);
 	}
 
@@ -70,6 +81,8 @@ public class AcxControl {
 
 	public boolean login() {
 
+		authenticationTime = 0;
+
 		Login login = new Login();
 		login.setPassword(password);
 		login.setUser(username);
@@ -80,6 +93,7 @@ public class AcxControl {
 			setAuthenticationId(null);
 			LoginResponse loginResponse = proxy.login(login);
 			setAuthenticationId(loginResponse.getAuthId());
+			authenticationTime = System.currentTimeMillis();
 		} catch (RemoteException e) {
 			e.printStackTrace();
 			return false;
@@ -90,6 +104,9 @@ public class AcxControl {
 
 	public boolean systemLogin(String systemPassword) {
 
+		authenticationTime = 0;
+		this.systemPassword = systemPassword;
+
 		SystemLogin systemLogin = new SystemLogin();
 		systemLogin.setSystemPassword(systemPassword);
 
@@ -98,6 +115,7 @@ public class AcxControl {
 			setAuthenticationId(null);
 			SystemLoginResponse systemLoginResponse = proxy.systemLogin(systemLogin);
 			setAuthenticationId(systemLoginResponse.getAuthId());
+			authenticationTime = System.currentTimeMillis();
 		} catch (RemoteException e) {
 			e.printStackTrace();
 			return false;
@@ -107,13 +125,21 @@ public class AcxControl {
 
 	}
 
+	public boolean systemLogin() throws ActuateException {
+		if (systemPassword == null)
+			throw new ActuateException("System Password not specified.");
+		else
+			return systemLogin(systemPassword);
+	}
+
+	public boolean isAuthenticationExpired() {
+		long now = System.currentTimeMillis();
+		return authenticationTime != 0 && (now - authenticationTime >= AUTHENTICATION_TIMEOUT);
+	}
+
 	public void reset() {
 		if (proxy != null) {
-			String authenticationId = null;
-			if (actuateAPI != null)
-				authenticationId = actuateAPI.getAuthId();
-
-			actuateAPI = new ActuateAPILocatorEx();
+			actuateAPI = new ActuateAPILocatorEx(this);
 			try {
 				proxy = (ActuateSoapBindingStub) actuateAPI.getActuateSoapPort(new URL(actuateServerURL));
 			} catch (ServiceException e) {
@@ -123,17 +149,12 @@ public class AcxControl {
 				e.printStackTrace();
 				return;
 			}
-
-			if (authenticationId != null)
-				actuateAPI.setAuthId(authenticationId);
 		}
 
 		if (proxyInternal != null) {
 			String authenticationId = null;
-			if (actuateAPIInternal != null)
-				authenticationId = actuateAPIInternal.getAuthId();
 
-			actuateAPIInternal = new ActuateAPIInternalLocatorEx();
+			actuateAPIInternal = new ActuateAPIInternalLocatorEx(this);
 			try {
 				proxyInternal = (com.actuate.schemas.internal.ActuateSoapBindingStub) actuateAPIInternal.getActuateSoapPort(new URL(actuateServerURL));
 			} catch (ServiceException e) {
@@ -143,9 +164,6 @@ public class AcxControl {
 				e.printStackTrace();
 				return;
 			}
-
-			if (authenticationId != null)
-				actuateAPIInternal.setAuthId(authenticationId);
 		}
 	}
 
@@ -172,16 +190,11 @@ public class AcxControl {
 	}
 
 	public void setAuthenticationId(String authenticationId) {
-		actuateAPI.setAuthId(authenticationId);
-		actuateAPIInternal.setAuthId(authenticationId);
+		this.authenticationId = authenticationId;
 	}
 
 	public String getAuthenticationId() {
-		String authId = actuateAPI.getAuthId();
-		if (authId != null)
-			return authId;
-		else
-			return actuateAPIInternal.getAuthId();
+		return authenticationId;
 	}
 
 	public void setPassword(String password) {
@@ -208,29 +221,43 @@ public class AcxControl {
 	}
 
 	public void setConnectionHandle(String connectionHandle) {
-		actuateAPI.setConnectionHandle(connectionHandle);
-		actuateAPIInternal.setConnectionHandle(connectionHandle);
+		this.connectionHandle = connectionHandle;
 	}
 
 	public String getConnectionHandle() {
-		String connHandle = actuateAPI.getConnectionHandle();
-		if (connHandle != null)
-			return connHandle;
-		else
-			return actuateAPIInternal.getConnectionHandle();
+		return connectionHandle;
 	}
 
-	public void setTargetVolume(String volume) {
-		actuateAPI.setTargetVolume(volume);
-		actuateAPIInternal.setTargetVolume(volume);
+	public String getLocale() {
+		return locale;
+	}
+
+	public void setLocale(String locale) {
+		this.locale = locale;
+	}
+
+	public void setTargetVolume(String targetVolume) {
+		this.targetVolume = targetVolume;
 	}
 
 	public String getTargetVolume() {
-		String volume = actuateAPI.getTargetVolume();
-		if (volume != null)
-			return volume;
-		else
-			return actuateAPIInternal.getTargetVolume();
+		return targetVolume;
+	}
+
+	public Boolean getDelayFlush() {
+		return delayFlush;
+	}
+
+	public void setDelayFlush(Boolean delayFlush) {
+		this.delayFlush = delayFlush;
+	}
+
+	public String getFileType() {
+		return fileType;
+	}
+
+	public void setFileType(String fileType) {
+		this.fileType = fileType;
 	}
 
 	public void setSOAPHeader(String name, String value) {

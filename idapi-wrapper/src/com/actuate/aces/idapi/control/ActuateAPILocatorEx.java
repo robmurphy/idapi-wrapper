@@ -17,44 +17,41 @@ import javax.xml.rpc.ServiceException;
 
 public class ActuateAPILocatorEx extends ActuateAPILocator implements ActuateAPIEx {
 
-	private String authId = "";
-	private String locale = "en_US";
-	private String targetVolume;
-	private String connectionHandle;
-	private Boolean delayFlush;
+	private AcxControl controller = null;
 	private Call call = null;
-	private String fileType;
 
-	public ActuateAPILocatorEx() {
+	public ActuateAPILocatorEx(AcxControl controller) {
 		super();
+		this.controller = controller;
 	}
 
 	public Call createCall() throws ServiceException {
+
+		//If authentication Time is > 0 and has expired, re-issue login based on controller's user/pass/extendedCredentials
+		if (controller.isAuthenticationExpired())
+			controller.login();
+
 		call = (Call) super.createCall();
 
-		if (authId != null)
-			call.addHeader(new SOAPHeaderElement(null, "AuthId", authId));
+		if (controller.getAuthenticationId() != null)
+			call.addHeader(new SOAPHeaderElement(null, "AuthId", controller.getAuthenticationId()));
 
-		if (locale != null)
-			call.addHeader(new SOAPHeaderElement(null, "Locale", locale));
+		if (controller.getConnectionHandle() != null)
+			call.addHeader(new SOAPHeaderElement(null, "ConnectionHandle", controller.getConnectionHandle()));
 
-		if (targetVolume != null)
-			call.addHeader(new SOAPHeaderElement(null, "TargetVolume", targetVolume));
+		if (controller.getLocale() != null)
+			call.addHeader(new SOAPHeaderElement(null, "Locale", controller.getLocale()));
 
-		if (fileType != null)
-			call.addHeader(new SOAPHeaderElement(null, "FileType", fileType));
+		if (controller.getTargetVolume() != null)
+			call.addHeader(new SOAPHeaderElement(null, "TargetVolume", controller.getTargetVolume()));
 
-		if (connectionHandle != null)
-			call.addHeader(new SOAPHeaderElement(null, "ConnectionHandle", connectionHandle));
+		if (controller.getFileType() != null)
+			call.addHeader(new SOAPHeaderElement(null, "FileType", controller.getFileType()));
 
-		if (targetVolume != null)
-			call.addHeader(new SOAPHeaderElement(null, "DelayFlush", delayFlush));
+		if (controller.getDelayFlush() != null)
+			call.addHeader(new SOAPHeaderElement(null, "DelayFlush", controller.getDelayFlush()));
 
 		return call;
-	}
-
-	public String getAuthId() {
-		return authId;
 	}
 
 	public Call getCall() {
@@ -65,50 +62,6 @@ public class ActuateAPILocatorEx extends ActuateAPILocator implements ActuateAPI
 			}
 		}
 		return call;
-	}
-
-	public String getConnectionHandle() {
-		return connectionHandle;
-	}
-
-	public Boolean getDelayFlush() {
-		return delayFlush;
-	}
-
-	public String getLocale() {
-		return locale;
-	}
-
-	public String getTargetVolume() {
-		return targetVolume;
-	}
-
-	public void setAuthId(String authId) {
-		this.authId = authId;
-	}
-
-	public void setConnectionHandle(String connectionHandle) {
-		this.connectionHandle = connectionHandle;
-	}
-
-	public void setDelayFlush(Boolean delayFlush) {
-		this.delayFlush = delayFlush;
-	}
-
-	public void setLocale(String locale) {
-		this.locale = locale;
-	}
-
-	public void setTargetVolume(String targetVolume) {
-		this.targetVolume = targetVolume;
-	}
-
-	public java.lang.String getFileType() {
-		return fileType;
-	}
-
-	public void setFileType(String fileType) {
-		this.fileType = fileType;
 	}
 
 }

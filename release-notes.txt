@@ -2,6 +2,14 @@ IDAPI Wrapper for Actuate iHub
 Release Notes
 
 ====================
+2014-02-18    3.0.0a
+====================
+- Targeting Actuate BIRT iHub 3
+- Version number will now try to match that of BIRT iHub.  We will use major.minor to correspond with product.  subversion will be used for wrapper only
+- Automatic AuthenticationId expiration logic.  On each request, checks to see age of AuthenticationId.  If older than timeout (23 hours by default) a new login request will be sent.  Required refactoring of many "control" classes.
+
+
+====================
 2014-01-13     1.8.1
 ====================
 - Added reference inline class sample

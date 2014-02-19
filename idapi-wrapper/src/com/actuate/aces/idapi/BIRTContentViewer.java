@@ -74,9 +74,9 @@ public class BIRTContentViewer extends BaseController {
 		selectJavaReportPage.setOutputFormat(outputFormat);
 		selectJavaReportPage.setDownloadEmbedded(false);
 
-		acxControl.actuateAPI.setFileType(sourceFile.substring(sourceFile.lastIndexOf(".") + 1));
+		acxControl.setFileType(sourceFile.substring(sourceFile.lastIndexOf(".") + 1));
 		acxControl.proxy.selectJavaReportPage(selectJavaReportPage);
-		acxControl.actuateAPI.setFileType(null);
+		acxControl.setFileType(null);
 
 		Iterator iter = acxControl.actuateAPI.getCall().getMessageContext().getResponseMessage().getAttachments();
 		while (iter.hasNext()) {

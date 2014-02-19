@@ -29,7 +29,7 @@ import java.util.HashMap;
 
 public class Tester {
 
-	static String host = "http://localhost:8000";
+	static String host = "http://localhost:7999";
 	static String username = "Administrator";
 	static String password = "";
 	static String volume = "Default Volume";
@@ -40,7 +40,7 @@ public class Tester {
 		//executeReportAndSaveToDisk();
 		//exportReportAndSaveToDisk();
 		//downloadFile();
-		//executeReportTest(5, true);
+		executeReportTest(2, false);
 		//listAllFiles();
 		//listAllFilesAndPermissions();
 		//downloadEntireFolder();
@@ -51,7 +51,7 @@ public class Tester {
 		//getJobsForReport("/Resources/Classic Models.datadesign");
 		//getReportParameters("/Ad-Hoc Mashup.rptdesign");
 		//scheduleJob();
-		inlineTask();
+		//inlineTask();
 
 		System.exit(0);
 	}
@@ -311,7 +311,17 @@ public class Tester {
 
 		} else if (mode == 2) {
 			// Run and Save
-			reportExecuter.executeReport("/Public/BIRT and BIRT Studio Examples/Customers List by Country.rptdesign", "/Test Output.rptdocument");
+			for (int i = 0; i < 5; i++) {
+				reportExecuter.executeReport("/Public/BIRT and BIRT Studio Examples/Sales by Region.rptdesign", "/Test Output.rptdocument");
+				System.out.println("DONE " + (i + 1));
+				try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+
+			reportExecuter.executeReport("/Public/BIRT and BIRT Studio Examples/Sales by Region.rptdesign", "/Test Output.rptdocument");
 			viewURL += "iv?__report=/Test Output.rptdocument";
 
 		} else if (mode == 3) {

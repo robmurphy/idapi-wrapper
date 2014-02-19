@@ -18,18 +18,18 @@ import java.rmi.RemoteException;
 
 public class ACDLoad {
 
-	private static final int NUM_OF_USERS = 100;
+	private static final int NUM_OF_USERS = 5;
 	public static final String USER_PREFIX = "User";
-	public static final String USER_PASSORD = "birt";
+	public static final String USER_PASSWORD = "birt";
 	public static final String HOME_FOLDER_ROOT = "/home/";
 
 
 	public static void main(String[] args) throws IOException, ActuateException, ServiceException {
 
-		Authenticator auth = new Authenticator("http://192.168.1.2:8000", "Administrator", "Actuate!", "ActuateOne");
-		//Authenticator auth = new Authenticator("http://vm-nitrous:8000", "Administrator", "", "ActuateOne");
+		//Authenticator auth = new Authenticator("http://192.168.1.2:8000", "Administrator", "Actuate!", "Default Volume");
+		Authenticator auth = new Authenticator("http://localhost:8000", "Administrator", "", "Default Volume");
 		createUsers(auth.getAcxControl());
-		loadContent(auth, "/Users/pierretessier/Desktop/Roadshow 2012/iServer Content/");
+		//loadContent(auth, args[0]);
 
 		System.exit(0);
 	}
@@ -82,7 +82,7 @@ public class ACDLoad {
 
 			User user = new User();
 			user.setName(username);
-			user.setPassword(USER_PASSORD);
+			user.setPassword(USER_PASSWORD);
 			user.setHomeFolder(homeFolder);
 			user.setViewPreference(UserViewPreference.Default);
 			user.setMaxJobPriority(1000L);
@@ -101,10 +101,10 @@ public class ACDLoad {
 		control.proxy.administrate(administrate);
 
 		System.out.println("Setting User Roles...");
-		ArrayOfString roles = new ArrayOfString();
-		roles.setString(new String[]{"Active Portal Administrator"});
+		//ArrayOfString roles = new ArrayOfString();
+		//roles.setString(new String[]{"Active Portal Administrator"});
 		UpdateUserOperation updateUserOperation = new UpdateUserOperation();
-		updateUserOperation.setSetRolesByName(roles);
+		//updateUserOperation.setSetRolesByName(roles);
 		UserCondition userCondition = new UserCondition();
 		userCondition.setField(UserField.Name);
 		userCondition.setMatch(USER_PREFIX + "*");
