@@ -38,7 +38,6 @@ Include in your Java project.  All libraries (.jar) referenced by project must b
 ## API Reference
 
 Please refer to Actuate Information Delivery API reference docs
-
 //TODO: include link to online javadoc for IDAPI
 
 ## Tests
