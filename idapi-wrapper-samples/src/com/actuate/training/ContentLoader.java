@@ -64,7 +64,7 @@ public class ContentLoader {
 
 			volumeUploadSimple.setPermissions(null);
 			volumeUploadSimple.addPermission(null, "All", "VRW");
-			volumeUploadSimple.upload(dashboardsFile.getAbsolutePath(), "/Dashboard/Contents");
+			volumeUploadSimple.upload(dashboardsFile.getAbsolutePath(), "/Dashboards");
 		}
 
 		File resourcesFile = new File((new StringBuilder()).append(baseSourcePath).append("Resources").toString());
