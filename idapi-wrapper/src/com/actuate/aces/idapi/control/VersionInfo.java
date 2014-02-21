@@ -25,7 +25,7 @@ public class VersionInfo {
 	public static final int WRAPPER_SUB_VERSION = 0;
 
 	// indicates wether the current release version is a production or beta/alpha release
-	public static final boolean PRODUCTION_RELEASE = false;
+	public static final boolean PRODUCTION_RELEASE = true;
 
 
 	public static int getNamespaceVersion() {

@@ -38,30 +38,20 @@ public class AcxControl {
 
 	// proxy operation
 	public ActuateSoapBindingStub proxy;
-	public com.actuate.schemas.internal.ActuateSoapBindingStub proxyInternal;
 	public ActuateAPIEx actuateAPI;
-	public ActuateAPIInternalEx actuateAPIInternal;
 
 	public AcxControl() throws MalformedURLException, ServiceException {
 		actuateAPI = new ActuateAPILocatorEx(this);
-		actuateAPIInternal = new ActuateAPIInternalLocatorEx(this);
 		setActuateServerURL(actuateServerURL);
 	}
 
 	public AcxControl(String serverURL) throws MalformedURLException, ServiceException {
 		actuateAPI = new ActuateAPILocatorEx(this);
-		actuateAPIInternal = new ActuateAPIInternalLocatorEx(this);
 		setActuateServerURL(serverURL);
 	}
 
 	public Call createCall() throws ServiceException {
 		Call call = (Call) actuateAPI.createCall();
-		call.setTargetEndpointAddress(this.actuateServerURL);
-		return call;
-	}
-
-	public Call createCallInternal() throws ServiceException {
-		Call call = (Call) actuateAPIInternal.createCall();
 		call.setTargetEndpointAddress(this.actuateServerURL);
 		return call;
 	}
@@ -102,36 +92,6 @@ public class AcxControl {
 		return true;
 	}
 
-	public boolean systemLogin(String systemPassword) {
-
-		authenticationTime = 0;
-		this.systemPassword = systemPassword;
-
-		SystemLogin systemLogin = new SystemLogin();
-		systemLogin.setSystemPassword(systemPassword);
-
-		try {
-			setConnectionHandle(null);
-			setAuthenticationId(null);
-			SystemLoginResponse systemLoginResponse = proxy.systemLogin(systemLogin);
-			setAuthenticationId(systemLoginResponse.getAuthId());
-			authenticationTime = System.currentTimeMillis();
-		} catch (RemoteException e) {
-			e.printStackTrace();
-			return false;
-		}
-
-		return true;
-
-	}
-
-	public boolean systemLogin() throws ActuateException {
-		if (systemPassword == null)
-			throw new ActuateException("System Password not specified.");
-		else
-			return systemLogin(systemPassword);
-	}
-
 	public boolean isAuthenticationExpired() {
 		long now = System.currentTimeMillis();
 		return authenticationTime != 0 && (now - authenticationTime >= AUTHENTICATION_TIMEOUT);
@@ -144,25 +104,8 @@ public class AcxControl {
 				proxy = (ActuateSoapBindingStub) actuateAPI.getActuateSoapPort(new URL(actuateServerURL));
 			} catch (ServiceException e) {
 				e.printStackTrace();
-				return;
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
-				return;
-			}
-		}
-
-		if (proxyInternal != null) {
-			String authenticationId = null;
-
-			actuateAPIInternal = new ActuateAPIInternalLocatorEx(this);
-			try {
-				proxyInternal = (com.actuate.schemas.internal.ActuateSoapBindingStub) actuateAPIInternal.getActuateSoapPort(new URL(actuateServerURL));
-			} catch (ServiceException e) {
-				e.printStackTrace();
-				return;
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-				return;
 			}
 		}
 	}
@@ -170,9 +113,6 @@ public class AcxControl {
 	public void setActuateServerURL(String serverURL) throws MalformedURLException, ServiceException {
 		if ((proxy == null) || !serverURL.equals(actuateServerURL))
 			proxy = (ActuateSoapBindingStub) actuateAPI.getActuateSoapPort(new URL(serverURL));
-
-		if ((proxyInternal == null) || !serverURL.equals(actuateServerURL))
-			proxyInternal = (com.actuate.schemas.internal.ActuateSoapBindingStub) actuateAPIInternal.getActuateSoapPort(new URL(serverURL));
 
 		actuateServerURL = serverURL;
 	}
@@ -280,28 +220,8 @@ public class AcxControl {
 		}
 	}
 
-	public void setSOAPHeaderInternal(String name, String value) {
-		proxyInternal.setHeader(new SOAPHeaderElement(new QName(NAMESPACE, name), value));
-	}
-
 	public String getNamespace() {
 		return NAMESPACE;
-	}
-
-	public void removeSOAPHeaderInternal(String name) {
-		SOAPHeaderElement[] headers = proxyInternal.getHeaders();
-		ArrayList<SOAPHeaderElement> newHeaders = new ArrayList<SOAPHeaderElement>();
-
-		for (SOAPHeaderElement header : headers) {
-			if (!header.getName().equals(name))
-				newHeaders.add(header);
-		}
-
-		proxyInternal.clearHeaders();
-
-		for (SOAPHeaderElement newHeader : newHeaders) {
-			proxyInternal.setHeader(newHeader);
-		}
 	}
 
 	private String getDefaultVolume() {

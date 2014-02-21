@@ -2,6 +2,14 @@ IDAPI Wrapper for Actuate iHub
 Release Notes
 
 ====================
+2014-02-21     3.0.0
+====================
+- Final 3.0 Release
+- Removed all "internal" calls.  No more System level calls, as those will be moved to the provisionning API wrapper (another project)
+- Updated all .jar files to iHub 3
+
+
+====================
 2014-02-18    3.0.0a
 ====================
 - Targeting Actuate BIRT iHub 3

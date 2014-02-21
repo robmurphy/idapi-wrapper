@@ -9,7 +9,6 @@ import com.actuate.aces.idapi.actions.VolumeUpload;
 import com.actuate.aces.idapi.actions.VolumeUploadSimple;
 import com.actuate.aces.idapi.actions.model.VolumeUploadModel;
 import com.actuate.aces.idapi.control.ActuateException;
-import com.actuate.aces.idapi.system.VolumeAdmin;
 import com.actuate.schemas.*;
 
 import javax.xml.bind.JAXBContext;
@@ -29,7 +28,7 @@ import java.util.HashMap;
 
 public class Tester {
 
-	static String host = "http://localhost:7999";
+	static String host = "http://localhost:8000";
 	static String username = "Administrator";
 	static String password = "";
 	static String volume = "Default Volume";
@@ -40,14 +39,13 @@ public class Tester {
 		//executeReportAndSaveToDisk();
 		//exportReportAndSaveToDisk();
 		//downloadFile();
-		executeReportTest(2, false);
-		//listAllFiles();
+		//executeReportTest(2, false);
+		listAllFiles();
 		//listAllFilesAndPermissions();
 		//downloadEntireFolder();
 		//uploadEntireFolder();
 		//migrateFolder();
 		//volumeUpload();
-		//volumeOfflineOnline("actuate", "ActuateOne");
 		//getJobsForReport("/Resources/Classic Models.datadesign");
 		//getReportParameters("/Ad-Hoc Mashup.rptdesign");
 		//scheduleJob();
@@ -129,22 +127,6 @@ public class Tester {
 			System.out.println(jobProperties.getActualOutputFileName());
 		}
 	}
-
-	private static void volumeOfflineOnline(String systemPassword, String volumeName) throws ServiceException, ActuateException, MalformedURLException {
-
-		// Initialize com.actuate.aces.idapi.system.VolumeAdmin class with iServer SOAP Endpoint
-		VolumeAdmin volumeAdmin = new VolumeAdmin(host);
-
-		// Do a System login with system administrator password
-		volumeAdmin.systemLogin(systemPassword);
-
-		// Put a volume Offline (volumeName)
-		volumeAdmin.putOffline(volumeName);
-
-		// Take a volume online (volumeName);
-		volumeAdmin.takeOnline(volumeName);
-	}
-
 
 	private static void volumeUpload() throws IOException, ActuateException, ServiceException {
 

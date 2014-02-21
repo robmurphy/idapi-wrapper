@@ -48,11 +48,6 @@ public abstract class BaseController {
 			throw new ActuateException("Authentication to Actuate Server Failed!");
 	}
 
-	public void systemLogin(String systemPassword) throws ActuateException {
-		if (!acxControl.systemLogin(systemPassword))
-			throw new ActuateException("Authentication to Actuate Server System Failed!");
-	}
-
 	public String getAuthenticationId() {
 		return acxControl.getAuthenticationId();
 	}
