@@ -21,7 +21,7 @@
         <IdapiUploader authId="${AuthId}" serverUrl="${ServerUrl}"
                        sourceFile="C:/workspace/reports/Corporate Report.rptdesign"
                        destinationFile="/Public/Corporate Report.rptdesign" userPermissions="test1:VRE,test2:V"
-                       rolePermissions="Finance:VREG"/>
+                       userGroupPermissions="Finance:VREG"/>
     </target>
 
     <target name="Authentication">
@@ -50,13 +50,13 @@
     <target name="copyFile" depends="Authentication">
         <IdapiFileCopier AuthId="${AuthId}" ServerUrl="${ServerUrl}" SourceFile="/delete.rptdesign"
                          DestinationFile="/Public/Test.rptdesign" UserPermissions="test1:VRE,test2:VRE"
-                         RolePermissions="Finance:VRE" ReplacePermissions="false"/>
+                         UserGroupPermissions="Finance:VRE" ReplacePermissions="false"/>
     </target>
 
     <target name="uploadFile" depends="Authentication">
         <IdapiUploader AuthId="${AuthId}" serverUrl="${ServerUrl}"
                        sourceFile="C:/workspace/reports/Corporate Report.rptdesign"
-                       destinationFile="/Corporate Report.rptdesign" rolePermissions="All:VRE"/>
+                       destinationFile="/Corporate Report.rptdesign" UserGroupPermissions="All:VRE"/>
     </target>
 
     <target name="volumeDownload" depends="Authentication">
@@ -72,7 +72,7 @@
 
     <target name="VolumeUpload" depends="Authentication">
         <IdapiVolumeUploadSimple AuthId="${AuthId}" ServerUrl="${ServerUrl}" SourcePath="C:/workspace/reports/Test"
-                                 TargetPath="/Test" DeleteFirst="true" RolePermissions="All:VRE" Recursive="true"/>
+                                 TargetPath="/Test" DeleteFirst="true" UserGroupPermissions="All:VRE" Recursive="true"/>
     </target>
 
 </project>
