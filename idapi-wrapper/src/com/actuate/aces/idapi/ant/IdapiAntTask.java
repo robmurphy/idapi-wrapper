@@ -12,7 +12,8 @@ import com.actuate.schemas.Permission;
 /**
  * Base task class for several IDAPI tasks that sets user/usergroup permissions
  */
-public abstract class BasePermissionTask extends Task {
+public abstract class IdapiAntTask extends Task {
+    protected static final String NL = System.lineSeparator();
 	protected ArrayList<Permission> permissions = new ArrayList<Permission>();
 	
 	public void setUserPermissions(String userPermissions) {
@@ -63,11 +64,7 @@ public abstract class BasePermissionTask extends Task {
 		if (permissions.size() == 0 )
 			return null;
 		else{
-			Permission[] perms = permissions.toArray(new Permission[0]);
-
-for (int i =0; i < perms.length; i++){
-	System.out.println("Rights:  " + perms[i].getAccessRight());
-}
+			Permission[] perms = permissions.toArray(new Permission[permissions.size()]);
 			ArrayOfPermission aop = new ArrayOfPermission(perms);
 			return aop;
 		}
