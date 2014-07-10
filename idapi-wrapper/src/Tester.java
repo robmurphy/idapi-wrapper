@@ -35,12 +35,12 @@ public class Tester {
 
 	public static void main(String[] args) throws IOException, ActuateException, ServiceException, SOAPException {
 
-		//executeReportAndExtractData();
+		executeReportAndExtractData();
 		//executeReportAndSaveToDisk();
 		//exportReportAndSaveToDisk();
 		//downloadFile();
 		//executeReportTest(2, false);
-		listAllFiles();
+		//listAllFiles();
 		//listAllFilesAndPermissions();
 		//downloadEntireFolder();
 		//uploadEntireFolder();
@@ -49,9 +49,19 @@ public class Tester {
 		//getJobsForReport("/Resources/Classic Models.datadesign");
 		//getReportParameters("/Ad-Hoc Mashup.rptdesign");
 		//scheduleJob();
+
+		//scratchPad();
 		//inlineTask();
 
+
 		System.exit(0);
+	}
+
+	private static void scratchPad() throws MalformedURLException, ActuateException, ServiceException {
+		FileRemover fileRemover = new FileRemover(host, username, password, volume);
+		for (int i = 0; i < 16; i++) {
+			fileRemover.delete("/Test Output.rptdocument");
+		}
 	}
 
 	private static void inlineTask() throws MalformedURLException, ActuateException, ServiceException {
@@ -235,12 +245,15 @@ public class Tester {
 
 		ReportExecuter reportExecuter = new ReportExecuter(host, username, password, volume);
 		//TODO: The following line can also accept optional report parameters.  Look at ReportExecuter class for more info
-		String objId = reportExecuter.executeReport("/Public/BIRT and BIRT Studio Examples/Sales by Employee.rptdesign");
+		//String objId = reportExecuter.executeReport("/Public/BIRT and BIRT Studio Examples/Sales by Employee.rptdesign");
+		HashMap<String, String> parameters = new HashMap<String, String>();
+		parameters.put("dataFileName", "CIP-VA-DataObject");
+		String objId = reportExecuter.executeReport("/CIP/VA.rptdesign", "/CIP/VA.rptdocument", parameters, ExecuteReportStatus.Done);
 
 		DataExtractor dataExtractor = new DataExtractor(reportExecuter);
-		String sourceFile = "/$$$Transient/" + objId + ".rptdocument";
-		//TODO: In this sample we always target the 2nd exportable data set.  Some reports may differ here, depending on how they are designed
-		ResultSetSchema resultSetSchema = dataExtractor.getAllMetaData(sourceFile)[1];
+		String sourceFile = "/CIP/VA.rptdocument";
+		//TODO: In this sample we always target the 1st exportable data set.  Some reports may differ here, depending on how they are designed
+		ResultSetSchema resultSetSchema = dataExtractor.getAllMetaData(sourceFile)[0];
 		String tableName = resultSetSchema.getResultSetName();
 		String[] columns = dataExtractor.getColumnsFromSchema(resultSetSchema);
 
@@ -250,10 +263,10 @@ public class Tester {
 		outputProps.put("BIRTDataExtractionLocaleNeutralFormat", "true");
 		outputProps.put("Locale", "en_US");
 		outputProps.put("BIRTExportDataType", "true");
-		outputProps.put("BIRTDataExtractionSep", "|");
+		outputProps.put("BIRTDataExtractionSep", ",");
 
 		//TODO: Change the following line to generate output based on your system
-		FileOutputStream outputStream = new FileOutputStream("/Users/pierretessier/Desktop/Test.psv");
+		FileOutputStream outputStream = new FileOutputStream("/Users/pierretessier/Desktop/Test.csv");
 		dataExtractor.extractToStream(sourceFile, tableName, columns, outputStream, outputProps);
 	}
 
