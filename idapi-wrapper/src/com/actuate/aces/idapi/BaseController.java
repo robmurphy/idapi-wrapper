@@ -117,4 +117,12 @@ public abstract class BaseController {
 			permissions.setPermission(newPermissions);
 		}
 	}
+
+	public Exception getException() {
+		return acxControl.getException();
+	}
+
+	protected void setException(Exception exception) {
+		acxControl.setException(exception);
+	}
 }

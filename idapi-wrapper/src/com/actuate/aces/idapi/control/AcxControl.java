@@ -35,6 +35,7 @@ public class AcxControl {
 	private String targetVolume = null;
 	private Boolean delayFlush = null;
 	private String fileType = null;
+	private Exception exception = null;
 
 	// proxy operation
 	public ActuateSoapBindingStub proxy;
@@ -86,6 +87,7 @@ public class AcxControl {
 			authenticationTime = System.currentTimeMillis();
 		} catch (RemoteException e) {
 			e.printStackTrace();
+			setException(e);
 			return false;
 		}
 
@@ -104,8 +106,10 @@ public class AcxControl {
 				proxy = (ActuateSoapBindingStub) actuateAPI.getActuateSoapPort(new URL(actuateServerURL));
 			} catch (ServiceException e) {
 				e.printStackTrace();
+				setException(e);
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
+				setException(e);
 			}
 		}
 	}
@@ -233,10 +237,23 @@ public class AcxControl {
 			getSystemVolumeNamesResponse = proxy.getSystemVolumeNames(getSystemVolumeNames);
 		} catch (RemoteException e) {
 			e.printStackTrace();
+			setException(e);
 			return null;
 		}
 
 		return getSystemVolumeNamesResponse.getSystemDefaultVolume();
+	}
+
+	public Exception getException() {
+		return exception;
+	}
+
+	public void clearException() {
+		exception = null;
+	}
+
+	public void setException(Exception exception) {
+		this.exception = exception;
 	}
 
 }

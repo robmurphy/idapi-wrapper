@@ -27,6 +27,8 @@ public class ActuateAPILocatorEx extends ActuateAPILocator implements ActuateAPI
 
 	public Call createCall() throws ServiceException {
 
+		controller.clearException();
+
 		//If authentication Time is > 0 and has expired, re-issue login based on controller's user/pass/extendedCredentials
 		if (controller.isAuthenticationExpired())
 			controller.login();
