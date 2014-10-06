@@ -1,11 +1,18 @@
 IDAPI Wrapper for Actuate iHub
 Release Notes
+====================
+2014-10-06     3.0.1
+====================
+- Added Exception calls to find out the last exception
+- Classes still need to implement setException() where appropriate
+- Redid ReportViewer as it should be, deprecated BIRTContentViewer accordingly.
+
 
 ====================
 2014-02-21     3.0.0
 ====================
 - Final 3.0 Release
-- Removed all "internal" calls.  No more System level calls, as those will be moved to the provisionning API wrapper (another project)
+- Removed all "internal" calls.  No more System level calls, as those will be moved to the provisioning API wrapper (another project)
 - Updated all .jar files to iHub 3
 
 
