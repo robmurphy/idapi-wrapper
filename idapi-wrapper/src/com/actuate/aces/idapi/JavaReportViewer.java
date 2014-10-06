@@ -10,10 +10,10 @@ import javax.xml.rpc.ServiceException;
 import java.net.MalformedURLException;
 
 /**
- * @deprecated This class is being replaced by the BIRTContentViewer class, which is more appropriately named
+ * @deprecated This class is being replaced by the ReportViewer class, which is more appropriately named
  */
 @Deprecated
-public class JavaReportViewer extends BIRTContentViewer {
+public class JavaReportViewer extends ReportViewer {
 	public JavaReportViewer(BaseController controller) {
 		super(controller);
 	}

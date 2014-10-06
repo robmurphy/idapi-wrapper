@@ -35,10 +35,11 @@ public class Tester {
 
 	public static void main(String[] args) throws IOException, ActuateException, ServiceException, SOAPException {
 
-		executeReportAndExtractData();
-		//executeReportAndSaveToDisk();
+		//executeReportAndExtractData();
+		executeReportAndSaveToDisk();
 		//exportReportAndSaveToDisk();
 		//downloadFile();
+		//uploadFile();
 		//executeReportTest(2, false);
 		//listAllFiles();
 		//listAllFilesAndPermissions();
@@ -275,13 +276,13 @@ public class Tester {
 		ReportExecuter reportExecuter = new ReportExecuter(host, username, password, volume);
 		String objId = reportExecuter.executeReport("/Public/BIRT and BIRT Studio Examples/Sales by Employee.rptdesign");
 
-		BIRTContentViewer birtContentViewer = new BIRTContentViewer(reportExecuter);
-		birtContentViewer.viewToFile("/$$$Transient/" + objId + ".rptdocument", "PDF", "/Users/pierretessier/Desktop/TestReport.pdf");
+		ReportViewer reportViewer = new ReportViewer(reportExecuter);
+		reportViewer.viewToFile("/$$$Transient/" + objId + ".rptdocument", "PDF", "/Users/pierretessier/Desktop/TestReport.pdf");
 	}
 
 	private static void exportReportAndSaveToDisk() throws IOException, ActuateException, ServiceException {
-		BIRTContentViewer birtContentViewer = new BIRTContentViewer(host, username, password, volume);
-		birtContentViewer.viewToFile("/home/Administrator/Customer Dashboard.rptdocument", "PDF", "/Users/pierretessier/TestReport.pdf");
+		ReportViewer reportViewer = new ReportViewer(host, username, password, volume);
+		reportViewer.viewToFile("/home/Administrator/Customer Dashboard.rptdocument", "PDF", "/Users/pierretessier/TestReport.pdf");
 	}
 
 	private static void executeReportTest(int mode, boolean open) throws MalformedURLException, ActuateException, ServiceException, UnsupportedEncodingException {
@@ -354,6 +355,11 @@ public class Tester {
 	private static void downloadFile() throws IOException, ActuateException, ServiceException {
 		Downloader downloader = new Downloader(host, username, password, volume);
 		downloader.downloadToFile("/Customer Dashboard.pdf", "C:\\Test Report.pdf");
+	}
+
+	private static void uploadFile() throws IOException, ActuateException, ServiceException {
+		Uploader uploader = new Uploader(host, username, password, volume);
+		uploader.uploadFileAsStream("/Users/pierretessier/Desktop/Travel Journeys.DATA", "/Resources/Data Objects/Travel Journeys.DATA");
 	}
 
 	private static void setPermissionsRecursively() throws MalformedURLException, ActuateException, ServiceException {
