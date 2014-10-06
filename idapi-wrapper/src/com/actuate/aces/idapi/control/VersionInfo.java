@@ -22,7 +22,7 @@ public class VersionInfo {
 	public static final int WRAPPER_MINOR_VERSION = 0;
 
 	// corresponds to sub version of this wrapper
-	public static final int WRAPPER_SUB_VERSION = 0;
+	public static final int WRAPPER_SUB_VERSION = 1;
 
 	// indicates wether the current release version is a production or beta/alpha release
 	public static final boolean PRODUCTION_RELEASE = true;
