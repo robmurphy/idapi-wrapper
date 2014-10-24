@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="idapi-wrapper-web-samples">
-    <output-path>$PROJECT_DIR$/out/artifacts/idapi_wrapper_web_samples</output-path>
+    <output-path>$PROJECT_DIR$/out/artifacts/idapi-wrapper-web-samples</output-path>
     <root id="root">
       <element id="javaee-facet-resources" facet="idapi-wrapper-web-samples/web/Web" />
       <element id="directory" name="WEB-INF">
