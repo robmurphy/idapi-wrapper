@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="idapi-wrapper-web-samples">
+  <artifact type="exploded-war" build-on-make="true" name="idapi-wrapper-web-samples">
     <output-path>$PROJECT_DIR$/out/artifacts/idapi-wrapper-web-samples</output-path>
     <root id="root">
       <element id="javaee-facet-resources" facet="idapi-wrapper-web-samples/web/Web" />
