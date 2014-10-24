@@ -6,7 +6,6 @@
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="idapi-wrapper-web-samples" />
-          <element id="module-output" name="idapi-wrapper" />
         </element>
         <element id="directory" name="lib">
           <element id="file-copy" path="$PROJECT_DIR$/idapi-wrapper/lib/activation-1.0.2.jar" />
@@ -21,6 +20,7 @@
           <element id="file-copy" path="$PROJECT_DIR$/idapi-wrapper/lib/org.apache.xerces_2.9.0.v201101211617.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/idapi-wrapper/lib/saaj.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/idapi-wrapper/lib/wsdl4j-1.5.1.jar" />
+          <element id="artifact" artifact-name="idapi-wrapper" />
         </element>
       </element>
     </root>
