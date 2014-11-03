@@ -36,8 +36,8 @@ public class Tester {
 	public static void main(String[] args) throws IOException, ActuateException, ServiceException, SOAPException {
 
 		//executeReportAndExtractData();
-		executeReportAndSaveToDisk();
-		//exportReportAndSaveToDisk();
+		//executeReportAndSaveToDisk();
+		exportReportAndSaveToDisk();
 		//downloadFile();
 		//uploadFile();
 		//executeReportTest(2, false);
@@ -50,6 +50,7 @@ public class Tester {
 		//getJobsForReport("/Resources/Classic Models.datadesign");
 		//getReportParameters("/Ad-Hoc Mashup.rptdesign");
 		//scheduleJob();
+		//createUser();
 
 		//scratchPad();
 		//inlineTask();
@@ -106,6 +107,30 @@ public class Tester {
 				//TODO: Implement something here, all BaseController properties are available
 			}
 		}.doInline(new String[]{jobId1, jobId2});
+	}
+
+	private static void createUser() throws MalformedURLException, ActuateException, ServiceException, RemoteException {
+		Authenticator auth = new Authenticator(host, username, password, volume);
+
+		AdminOperation adminOperations[] = new AdminOperation[1];
+
+		User user = new User();
+		user.setName("demo");
+		user.setPassword("demo");
+		user.setHomeFolder("/home/demo");
+		user.setViewPreference(UserViewPreference.Default);
+		user.setMaxJobPriority(1000L);
+
+		CreateUser createUser = new CreateUser();
+		createUser.setUser(user);
+		createUser.setIgnoreDup(true);
+
+		adminOperations[0] = new AdminOperation();
+		adminOperations[0].setCreateUser(createUser);
+
+		Administrate administrate = new Administrate();
+		administrate.setAdminOperation(adminOperations);
+		auth.getAcxControl().proxy.administrate(administrate);
 	}
 
 	private static void scheduleJob() throws MalformedURLException, ActuateException, ServiceException {
