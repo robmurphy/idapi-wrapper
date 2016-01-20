@@ -6,6 +6,7 @@ package com.actuate.aces.idapi;
 
 import com.actuate.aces.idapi.control.ActuateException;
 import com.actuate.schemas.*;
+import org.apache.axis.AxisFault;
 
 import javax.xml.rpc.ServiceException;
 import java.net.MalformedURLException;
@@ -60,8 +61,12 @@ public class FolderCreator extends BaseController {
 		try {
 			acxControl.proxy.administrate(administrate);
 		} catch (RemoteException e) {
-			e.printStackTrace();
-			return false;
+			if (AxisFault.makeFault(e).getFaultDetails()[1].getTextContent().equals("3069")) {
+				System.out.println("WARNING: " + name + " already exists in " + baseFolder);
+			} else {
+				e.printStackTrace();
+				return false;
+			}
 		}
 
 		return true;

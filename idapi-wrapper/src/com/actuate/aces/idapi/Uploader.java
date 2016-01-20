@@ -36,12 +36,12 @@ public class Uploader extends BaseController {
 		super(host, username, password, volume, extendedCredentials);
 	}
 
-	public String uploadFile(File file, String detination) throws IOException {
-		return upload(getFileBytes(file), detination);
+	public String uploadFile(File file, String destination) throws IOException {
+		return upload(getFileBytes(file), destination);
 	}
 
-	public String uploadFile(File file, String detination, boolean replaceExisting) throws IOException {
-		return upload(getFileBytes(file), detination, replaceExisting);
+	public String uploadFile(File file, String destination, boolean replaceExisting) throws IOException {
+		return upload(getFileBytes(file), destination, replaceExisting);
 	}
 
 	public String uploadFile(String fileName, String destination) throws IOException {
@@ -52,8 +52,8 @@ public class Uploader extends BaseController {
 		return upload(getFileBytes(fileName), destination, replaceExisting);
 	}
 
-	public String upload(String sourceData, String detination) throws IOException {
-		return upload(sourceData.getBytes(), detination, true);
+	public String upload(String sourceData, String destination) throws IOException {
+		return upload(sourceData.getBytes(), destination, true);
 	}
 
 	public String upload(InputStream inputStream, String destination) throws IOException {

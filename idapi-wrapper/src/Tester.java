@@ -37,7 +37,7 @@ public class Tester {
 
 		//executeReportAndExtractData();
 		//executeReportAndSaveToDisk();
-		exportReportAndSaveToDisk();
+		//exportReportAndSaveToDisk();
 		//downloadFile();
 		//uploadFile();
 		//executeReportTest(2, false);
@@ -51,8 +51,9 @@ public class Tester {
 		//getReportParameters("/Ad-Hoc Mashup.rptdesign");
 		//scheduleJob();
 		//createUser();
+		setUserPassword("admin", "birt");
 
-		//scratchPad();
+		scratchPad();
 		//inlineTask();
 
 
@@ -60,10 +61,9 @@ public class Tester {
 	}
 
 	private static void scratchPad() throws MalformedURLException, ActuateException, ServiceException {
-		FileRemover fileRemover = new FileRemover(host, username, password, volume);
-		for (int i = 0; i < 16; i++) {
-			fileRemover.delete("/Test Output.rptdocument");
-		}
+		PermissionSetter permissionSetter = new PermissionSetter(host, username, password, volume);
+		permissionSetter.addPermission("demo", "", "VREW");
+		permissionSetter.setRecursivePermissions("/Testing 123", true);
 	}
 
 	private static void inlineTask() throws MalformedURLException, ActuateException, ServiceException {
@@ -107,6 +107,30 @@ public class Tester {
 				//TODO: Implement something here, all BaseController properties are available
 			}
 		}.doInline(new String[]{jobId1, jobId2});
+	}
+
+	private static void setUserPassword(String userToSet, String passwordToSet) throws MalformedURLException, ServiceException, ActuateException, RemoteException {
+		Authenticator auth = new Authenticator(host, username, password, volume);
+
+		UpdateUserOperation updateUserOperation = new UpdateUserOperation();
+		User user = new User();
+		user.setName(userToSet);
+		user.setPassword(passwordToSet);
+		updateUserOperation.setSetAttributes(user);
+
+		UpdateUserOperationGroup updateUserOperationGroup = new UpdateUserOperationGroup();
+		updateUserOperationGroup.setUpdateUserOperation(new UpdateUserOperation[]{updateUserOperation});
+
+		UpdateUser updateUser = new UpdateUser();
+		updateUser.setName(user.getName());
+		updateUser.setUpdateUserOperationGroup(updateUserOperationGroup);
+
+		AdminOperation adminOperation = new AdminOperation();
+		adminOperation.setUpdateUser(updateUser);
+
+		Administrate administrate = new Administrate();
+		administrate.setAdminOperation(new AdminOperation[]{adminOperation});
+		auth.getAcxControl().proxy.administrate(administrate);
 	}
 
 	private static void createUser() throws MalformedURLException, ActuateException, ServiceException, RemoteException {
@@ -299,7 +323,7 @@ public class Tester {
 	private static void executeReportAndSaveToDisk() throws IOException, ActuateException, ServiceException {
 
 		ReportExecuter reportExecuter = new ReportExecuter(host, username, password, volume);
-		String objId = reportExecuter.executeReport("/Public/BIRT and BIRT Studio Examples/Sales by Employee.rptdesign");
+		String objId = reportExecuter.executeReport("/Public/Sales by Employee.rptdesign");
 
 		ReportViewer reportViewer = new ReportViewer(reportExecuter);
 		reportViewer.viewToFile("/$$$Transient/" + objId + ".rptdocument", "PDF", "/Users/pierretessier/Desktop/TestReport.pdf");
@@ -388,9 +412,40 @@ public class Tester {
 	}
 
 	private static void setPermissionsRecursively() throws MalformedURLException, ActuateException, ServiceException {
+
+		// Create permissionSetter object.
+		// values for default iHub configuration would be: ("http://<server>:8000", "Administrator", "", "Default Volume")
 		PermissionSetter permissionSetter = new PermissionSetter(host, username, password, volume);
-		permissionSetter.addPermission(null, "TestRole", "VR");
-		permissionSetter.setRecursivePermissions("/Temp1", true);
+
+
+		// create a User permission rule for: View, Read, Execute, Write, Delete, and Grant
+		permissionSetter.addPermission("TestUser", null, "VREWDG");
+
+		// create a Role permission rule for: View, and Read
+		permissionSetter.addPermission(null, "TestRole", "VR"); //View, Read
+
+
+		// set on a single file, replacing existing permissions
+		permissionSetter.setFilePermissions("/Test File.rptdesign", true);
+
+		// set on an array of files, not-replacing existing permissions (will be additive)
+		permissionSetter.setFilePermissions(new String[]{"/Test1.rptdesign", "/Test2.rptdesign"}, false);
+
+		// set on a folder recursively, replacing permissions
+		permissionSetter.setRecursivePermissions("/Test Folder", true);
+
+
+		// reset Permissions (loop to next user / role, etc)
+		permissionSetter.setPermissions(null);
+
+
+		// CODE BELOW GETS EXISTING PERMISSION ON AN OBJECT, AND CREATE CONSTRUCTOR FROM ANOTHER idapi-wrapper CLASS.
+		PermissionGetter permissionGetter = new PermissionGetter(permissionSetter);
+		ArrayOfPermission aop = permissionGetter.getPermissions("/Public");
+		Permission[] permissions = aop.getPermission();
+		for (Permission permission : permissions) {
+
+		}
 	}
 
 	private static void openURL(String url) {

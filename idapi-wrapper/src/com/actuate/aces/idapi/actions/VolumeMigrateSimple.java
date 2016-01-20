@@ -68,10 +68,25 @@ public class VolumeMigrateSimple extends BaseController {
 		if (deleteFirst)
 			retVal = new FileRemover(targetController).delete(targetPath);
 
-		return migratePath(sourcePath, targetPath, copyPermissions) && retVal;
+		return migratePath(sourcePath, targetPath, copyPermissions, true) && retVal;
 	}
 
-	private boolean migratePath(String sourcePath, String targetPath, boolean copyPermissions) throws IOException {
+	private boolean migratePath(String sourcePath, String targetPath, boolean copyPermissions, boolean initial) throws IOException {
+
+		System.out.println("Migrating Path: " + sourcePath);
+
+		if (initial && !sourcePath.equals("/")) {
+			if (copyPermissions) {
+				PermissionGetter permissionGetter = new PermissionGetter(this);
+				ArrayOfPermission permissions = permissionGetter.getPermissions(sourcePath);
+				targetController.setPermissions(cleanPermissions(permissions));
+			}
+
+			FolderCreator folderCreator = new FolderCreator(targetController);
+			String pathParts[] = getPathParts(targetPath);
+			folderCreator.createFolder(pathParts[1], pathParts[0]);
+		}
+
 		boolean retVal = true;
 
 		FileLister fileLister = new FileLister(this);
@@ -87,6 +102,8 @@ public class VolumeMigrateSimple extends BaseController {
 			String sourceFile = sourcePath + "/" + file.getName();
 			String targetFile = targetPath + "/" + file.getName();
 
+			System.out.println(sourceFile);
+
 			if (copyPermissions) {
 				PermissionGetter permissionGetter = new PermissionGetter(this);
 				ArrayOfPermission permissions = permissionGetter.getPermissions(sourceFile);
@@ -98,7 +115,7 @@ public class VolumeMigrateSimple extends BaseController {
 				FolderCreator folderCreator = new FolderCreator(targetController);
 				retVal = folderCreator.createFolder(file.getName(), targetPath) && retVal;
 
-				retVal = migratePath(sourceFile, targetFile, copyPermissions) && retVal;
+				retVal = migratePath(sourceFile, targetFile, copyPermissions, false) && retVal;
 
 			} else {
 
@@ -122,12 +139,26 @@ public class VolumeMigrateSimple extends BaseController {
 		Permission[] permissionsArray = permissions.getPermission();
 		for (Permission permission : permissionsArray) {
 			permission.setRoleId(null);
+			permission.setUserGroupId(null);
 			permission.setUserId(null);
 		}
 
 		ArrayOfPermission newPermissions = new ArrayOfPermission();
 		newPermissions.setPermission(permissionsArray);
 		return newPermissions;
+	}
+
+	private String[] getPathParts(String path) {
+		if (path.endsWith("/")) {
+			path = path.substring(0, path.length() - 1);
+		}
+
+		int ind = path.lastIndexOf("/");
+		if (ind == 0) {
+			return new String[]{"/", path.substring(1)};
+		}
+
+		return new String[]{path.substring(0, ind), path.substring(ind + 1)};
 	}
 
 }
