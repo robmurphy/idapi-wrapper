@@ -55,6 +55,7 @@ public class UserGroupCreator extends BaseController {
 			return false;
 		}
 
+
 		return true;
 	}
 }
