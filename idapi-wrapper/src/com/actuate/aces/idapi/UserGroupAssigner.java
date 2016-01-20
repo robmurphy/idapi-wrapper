@@ -14,20 +14,20 @@ import java.rmi.RemoteException;
 /**
  * Created by rmurphy on 7/25/2014.
  */
-public class UserGroupAssignor extends BaseController {
-	public UserGroupAssignor(BaseController controller) {
+public class UserGroupAssigner extends BaseController {
+	public UserGroupAssigner(BaseController controller) {
 		super(controller);
 	}
 
-	public UserGroupAssignor(String host, String authenticationId) throws MalformedURLException, ServiceException {
+	public UserGroupAssigner(String host, String authenticationId) throws MalformedURLException, ServiceException {
 		super(host, authenticationId);
 	}
 
-	public UserGroupAssignor(String host, String username, String password, String volume) throws ServiceException, ActuateException, MalformedURLException {
+	public UserGroupAssigner(String host, String username, String password, String volume) throws ServiceException, ActuateException, MalformedURLException {
 		super(host, username, password, volume);
 	}
 
-	public UserGroupAssignor(String host, String username, String password, String volume, byte[] extendedCredentials) throws ServiceException, ActuateException, MalformedURLException {
+	public UserGroupAssigner(String host, String username, String password, String volume, byte[] extendedCredentials) throws ServiceException, ActuateException, MalformedURLException {
 		super(host, username, password, volume, extendedCredentials);
 	}
 

@@ -1,6 +1,13 @@
 IDAPI Wrapper for Actuate iHub
 Release Notes
 ====================
+2016-01-20     3.0.2
+====================
+- Fixed UpdateFile
+- Added UserGroupAssigner, UserGroupCreator, UserRemover
+
+
+====================
 2014-10-06     3.0.1
 ====================
 - Added Exception calls to find out the last exception
