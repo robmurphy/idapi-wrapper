@@ -28,7 +28,7 @@ import java.util.HashMap;
 
 public class Tester {
 
-	static String host = "http://localhost:8000";
+	static String host = "http://localhost:18000";
 	static String username = "Administrator";
 	static String password = "";
 	static String volume = "Default Volume";
@@ -36,7 +36,7 @@ public class Tester {
 	public static void main(String[] args) throws IOException, ActuateException, ServiceException, SOAPException {
 
 		//executeReportAndExtractData();
-		//executeReportAndSaveToDisk();
+		executeReportAndSaveToDisk();
 		//exportReportAndSaveToDisk();
 		//downloadFile();
 		//uploadFile();
@@ -51,7 +51,7 @@ public class Tester {
 		//getReportParameters("/Ad-Hoc Mashup.rptdesign");
 		//scheduleJob();
 		//createUser();
-		setUserPassword("admin", "birt");
+		//setUserPassword("admin", "birt");
 
 		scratchPad();
 		//inlineTask();
@@ -323,7 +323,7 @@ public class Tester {
 	private static void executeReportAndSaveToDisk() throws IOException, ActuateException, ServiceException {
 
 		ReportExecuter reportExecuter = new ReportExecuter(host, username, password, volume);
-		String objId = reportExecuter.executeReport("/Public/Sales by Employee.rptdesign");
+		String objId = reportExecuter.executeReport("/Public/Sales by Region.rptdesign");
 
 		ReportViewer reportViewer = new ReportViewer(reportExecuter);
 		reportViewer.viewToFile("/$$$Transient/" + objId + ".rptdocument", "PDF", "/Users/pierretessier/Desktop/TestReport.pdf");
@@ -331,7 +331,7 @@ public class Tester {
 
 	private static void exportReportAndSaveToDisk() throws IOException, ActuateException, ServiceException {
 		ReportViewer reportViewer = new ReportViewer(host, username, password, volume);
-		reportViewer.viewToFile("/home/Administrator/Customer Dashboard.rptdocument", "PDF", "/Users/pierretessier/TestReport.pdf");
+		reportViewer.viewToFile("/Public/Sales by Region.rptdocument", "PDF", "/Users/pierretessier/TestReport.pdf");
 	}
 
 	private static void executeReportTest(int mode, boolean open) throws MalformedURLException, ActuateException, ServiceException, UnsupportedEncodingException {
