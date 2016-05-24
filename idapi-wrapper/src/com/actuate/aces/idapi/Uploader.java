@@ -40,16 +40,25 @@ public class Uploader extends BaseController {
 		super(host, username, password, volume, extendedCredentials);
 	}
 
-	public String uploadFile(File file, String detination) throws IOException {
-		return upload(getFileBytes(file), detination);
+	public String uploadFile(File file, String destination) throws IOException {
+		return upload(getFileBytes(file), destination);
+	}
+
+	/**
+	 * @deprecated
+	 */
+	public String uploadFile(File file, String destination, boolean replaceExisting) throws IOException {
+		this.setReplaceExisting(replaceExisting);
+		return upload(getFileBytes(file), destination);
 	}
 
 	public String uploadFile(String fileName, String destination) throws IOException {
 		return upload(getFileBytes(fileName), destination);
 	}
 
-	public String upload(String sourceData, String detination) throws IOException {
-		return upload(sourceData.getBytes(), detination);
+		
+	public String upload(String sourceData, String destination) throws IOException {
+		return upload(sourceData.getBytes(), destination);
 	}
 
 	public String upload(InputStream inputStream, String destination) throws IOException {

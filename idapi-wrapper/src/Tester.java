@@ -66,15 +66,16 @@ public class Tester {
 		}
 	}
 
-	private static void inlineTask() throws MalformedURLException, ActuateException, ServiceException {
+	private static void inlineTask() throws Exception {
 		String executableName = "/Public/BIRT and BIRT Studio Examples/Customer Order History.rptdesign";
 		String outputName = "/My Output.rptdocument";
 		HashMap<String, String> parameters = new HashMap<String, String>();
 		parameters.put("Customer", "Alpha Cognac");
 
 		JobScheduler jobScheduler = new JobScheduler(host, username, password, volume);
-		String jobId1 = jobScheduler.scheduleJob("TEST JOB", executableName, outputName, null, parameters);
-		String jobId2 = jobScheduler.scheduleJob("Testing 123", executableName, outputName, null, parameters);
+		jobScheduler.setParameters(parameters);
+		String jobId1 = jobScheduler.scheduleJob("TEST JOB", executableName, outputName, null);
+		String jobId2 = jobScheduler.scheduleJob("Testing 123", executableName, outputName, null);
 		System.out.println("jobIds = " + jobId1 + " -- " + jobId2);
 
 		long sleep = 0;
@@ -133,7 +134,7 @@ public class Tester {
 		auth.getAcxControl().proxy.administrate(administrate);
 	}
 
-	private static void scheduleJob() throws MalformedURLException, ActuateException, ServiceException {
+	private static void scheduleJob() throws Exception{
 
 		String executableName = "/Public/BIRT and BIRT Studio Examples/Customer Order History.rptdesign";
 		String outputName = "/My Output.rptdocument";
@@ -141,7 +142,8 @@ public class Tester {
 		parameters.put("Customer", "Alpha Cognac");
 
 		JobScheduler jobScheduler = new JobScheduler(host, username, password, volume);
-		String jobId = jobScheduler.scheduleJob("TEST JOB", executableName, outputName, null, parameters);
+		jobScheduler.setParameters(parameters);
+		String jobId = jobScheduler.scheduleJob("TEST JOB", executableName, outputName, null);
 		System.out.println("jobId = " + jobId);
 	}
 
@@ -274,7 +276,8 @@ public class Tester {
 		//String objId = reportExecuter.executeReport("/Public/BIRT and BIRT Studio Examples/Sales by Employee.rptdesign");
 		HashMap<String, String> parameters = new HashMap<String, String>();
 		parameters.put("dataFileName", "CIP-VA-DataObject");
-		String objId = reportExecuter.executeReport("/CIP/VA.rptdesign", "/CIP/VA.rptdocument", parameters, ExecuteReportStatus.Done);
+		reportExecuter.setParameters(parameters);
+		String objId = reportExecuter.executeReport("/CIP/VA.rptdesign", "/CIP/VA.rptdocument", ExecuteReportStatus.Done);
 
 		DataExtractor dataExtractor = new DataExtractor(reportExecuter);
 		String sourceFile = "/CIP/VA.rptdocument";
@@ -349,22 +352,24 @@ public class Tester {
 			// On demand with Parameters, no saving output
 			HashMap<String, String> parameters = new HashMap<String, String>();
 			parameters.put("Territory", "EMEA");
-			String objId = reportExecuter.executeReport("/Public/BIRT and BIRT Studio Examples/Sales by Territory.rptdesign", null, parameters);
+			reportExecuter.setParameters(parameters);
+			String objId = reportExecuter.executeReport("/Public/BIRT and BIRT Studio Examples/Sales by Territory.rptdesign", null);
 			viewURL += "iv?__report=/$$$Transient/" + objId + ".rptdocument&connectionHandle=" + URLEncoder.encode(reportExecuter.getConnectionHandle(), "UTF-8");
 
 		} else if (mode == 4) {
 			// Run and Save	with Parameters
 			HashMap<String, String> parameters = new HashMap<String, String>();
 			parameters.put("Territory", "APAC");
-			reportExecuter.executeReport("/Public/BIRT and BIRT Studio Examples/Customers List by Country.rptdesign", "/Test Output.rptdocument", parameters);
+			reportExecuter.setParameters(parameters);
+			reportExecuter.executeReport("/Public/BIRT and BIRT Studio Examples/Customers List by Country.rptdesign", "/Test Output.rptdocument");
 			viewURL += "iv?__report=/Test Output.rptdocument";
 		} else if (mode == 5) {
 			// progressive viewing, no saving output
-			String objId = reportExecuter.executeReport("Progressive Viewing.rptdesign", null, null, ExecuteReportStatus.FirstPage);
+			String objId = reportExecuter.executeReport("Progressive Viewing.rptdesign", null, ExecuteReportStatus.FirstPage);
 			viewURL += "iv?__report=/$$$Transient/" + objId + ".rptdocument&connectionHandle=" + URLEncoder.encode(reportExecuter.getConnectionHandle(), "UTF-8");
 		} else if (mode == 6) {
 			// progressive viewing saved output
-			String objId = reportExecuter.executeReport("Progressive Viewing.rptdesign", "/Progressive Viewing.rptdocument", null, ExecuteReportStatus.FirstPage);
+			String objId = reportExecuter.executeReport("Progressive Viewing.rptdesign", "/Progressive Viewing.rptdocument", ExecuteReportStatus.FirstPage);
 			viewURL += "iv?__report=/Progressive Viewing.rptdocument&connectionHandle=" + URLEncoder.encode(reportExecuter.getConnectionHandle(), "UTF-8");
 		}
 

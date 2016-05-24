@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="BizMFT" uuid="54a44061-fdaf-4f4e-897d-f3170e7d0a34">
+      <secret-storage>master_key</secret-storage>
+      <first-sync>true</first-sync>
+      <user-name>biz33tw</user-name>
+      <schema-pattern>*.BIZ33TW *.SYS *.SYSTEM</schema-pattern>
+      <default-schemas>*.BIZ33TW *.SYS *.SYSTEM</default-schemas>
+    </data-source>
+  </component>
+</project>

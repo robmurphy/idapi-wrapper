@@ -65,6 +65,7 @@ public class ReportExecuter extends BaseController {
 				outputFile.setACL(permissions);
 			executeReport.setRequestedOutputFile(outputFile);
 			executeReport.setSaveOutputFile(true);
+
 		}
 
 		if (parameters != null && parameters.size() > 0) {

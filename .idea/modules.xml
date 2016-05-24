@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../../Cloud/System Setup/System Setup.iml" filepath="$PROJECT_DIR$/../../Cloud/System Setup/System Setup.iml" />
       <module fileurl="file://$PROJECT_DIR$/idapi-wrapper/idapi-wrapper.iml" filepath="$PROJECT_DIR$/idapi-wrapper/idapi-wrapper.iml" />
       <module fileurl="file://$PROJECT_DIR$/idapi-wrapper-samples/idapi-wrapper-samples.iml" filepath="$PROJECT_DIR$/idapi-wrapper-samples/idapi-wrapper-samples.iml" />
       <module fileurl="file://$PROJECT_DIR$/idapi-wrapper-web-samples/idapi-wrapper-web-samples.iml" filepath="$PROJECT_DIR$/idapi-wrapper-web-samples/idapi-wrapper-web-samples.iml" />
     </modules>
   </component>
 </project>
-

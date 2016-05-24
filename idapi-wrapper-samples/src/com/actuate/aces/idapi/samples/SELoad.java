@@ -70,7 +70,8 @@ public class SELoad {
 		updateUserOperationGroup.setUpdateUserOperation(new UpdateUserOperation[]{updateUserOperation});
 
 		UpdateUser updateUser = new UpdateUser();
-		updateUser.setNameList(new ArrayOfString(getUsers()));
+		updateUser.setName("myUser");
+		//updateUser.setNameList(new ArrayOfString(getUsers()));
 		updateUser.setUpdateUserOperationGroup(updateUserOperationGroup);
 
 		AdminOperation adminOperation = new AdminOperation();
