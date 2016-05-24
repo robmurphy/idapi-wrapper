@@ -31,37 +31,23 @@ public class JobScheduler extends BaseController {
 		super(host, username, password, volume, extendedCredentials);
 	}
 
-	public String scheduleJob(String jobName, String executableName, String outputName) {
-		return scheduleJob(jobName, executableName, outputName, null, null, null);
+	public String scheduleJob(String jobName, String executableName, String outputName) throws RemoteException {
+		return scheduleJob(jobName, executableName, outputName, null, null);
 	}
 
-	public String scheduleJob(String jobName, String executableName, String outputName, String outputFormat) {
-		return scheduleJob(jobName, executableName, outputName, outputFormat, null, null);
+	public String scheduleJob(String jobName, String executableName, String outputName, String outputFormat) throws RemoteException {
+		return scheduleJob(jobName, executableName, outputName, outputFormat, null);
 	}
 
-	public String scheduleJob(String jobName, String executableName, String outputName, String outputFormat, HashMap<String, String> parameters) {
-		return scheduleJob(jobName, executableName, outputName, outputFormat, parameters, null);
-	}
-
-	public String scheduleJob(String jobName, String executableName, String outputName, String outputFormat, HashMap<String, String> parameters, Object scheduleTime) {
-		return scheduleJob(jobName, executableName, outputName, null, outputFormat, parameters, scheduleTime);
-	}
-
-	public String scheduleJob(String jobName, String executableName, String outputName, String versionName, String outputFormat, HashMap<String, String> parameters, Object scheduleTime) {
+	public String scheduleJob(String jobName, String executableName, String outputName, String outputFormat, Object scheduleTime) throws RemoteException {
 
 		SubmitJob submitJob = new SubmitJob();
 		submitJob.setJobName(jobName);
 		submitJob.setOperation(SubmitJobOperation.RunReport);
 		submitJob.setInputFileName(executableName);
 
-		NewFile newFile = new NewFile();
-		newFile.setName(outputName);
-		if (versionName != null)
-			newFile.setVersionName(versionName);
-		else
-			newFile.setReplaceExisting(true);
-		if (permissions != null)
-			newFile.setACL(permissions);
+		
+		NewFile newFile = getNewFile( outputName );
 		submitJob.setRequestedOutputFile(newFile);
 
 		if (outputFormat != null) {
@@ -114,12 +100,7 @@ public class JobScheduler extends BaseController {
 		}
 
 		SubmitJobResponse response;
-		try {
-			response = acxControl.proxy.submitJob(submitJob);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-			return null;
-		}
+		response = acxControl.proxy.submitJob(submitJob);
 
 		return response.getJobId();
 	}

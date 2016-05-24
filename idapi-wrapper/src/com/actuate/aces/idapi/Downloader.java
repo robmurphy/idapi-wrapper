@@ -27,6 +27,10 @@ public class Downloader extends BaseController {
 	public Downloader(String host, String authenticationId) throws MalformedURLException, ServiceException {
 		super(host, authenticationId);
 	}
+	
+	public Downloader(String host, String authenticationId, String volume) throws MalformedURLException, ServiceException {
+		super(host, authenticationId, volume);
+	}
 
 	public Downloader(String host, String username, String password, String volume) throws ServiceException, ActuateException, MalformedURLException {
 		super(host, username, password, volume);

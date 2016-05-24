@@ -5,11 +5,17 @@
 package com.actuate.aces.idapi.ant;
 
 import com.actuate.aces.idapi.Authenticator;
+import com.actuate.aces.idapi.Downloader;
+import com.actuate.aces.idapi.FileLister;
 import com.actuate.aces.idapi.control.ActuateException;
+import com.actuate.schemas.File;
+
 import org.apache.tools.ant.BuildException;
 
 import javax.xml.rpc.ServiceException;
+
 import java.net.MalformedURLException;
+import java.util.List;
 
 public class IdapiAuthenticate extends IdapiAntTask {
     private String serverUrl;
@@ -62,5 +68,22 @@ public class IdapiAuthenticate extends IdapiAntTask {
                 "\t                   UserName=\"${UserName}\" " + NL +
                 "\t                   Password=\"${Password}\" " + NL +
                 "\t                   Volume=\"myVolume\" />";
+    }
+    
+    public static void main(String[] args) throws Exception {
+    	final String serverUrl = "http://lit-vaihub-q001.qa.gxsonline.net:8000";
+    	final String userName = "administrator";
+    	final String password = "";
+    	final String volume = "B2B Analytics";
+    	
+        Authenticator authenticator = new Authenticator(serverUrl, userName, password, volume);
+        FileLister fl = new FileLister(serverUrl, authenticator.getAuthenticationId());
+        List<File> files = fl.getFileList("/Admin Reports");
+        for (int i = 0; i < files.size(); i++) {
+        	System.out.println(files.get(i).getName());
+        }
+        
+        Downloader fd = new Downloader(serverUrl, authenticator.getAuthenticationId(), volume);
+        fd.downloadToFile("/Admin Reports/B2BADataObjectScheduler.rptdesign", "c:/temp/B2BADataObjectScheduler.rptdesign");
     }
 }

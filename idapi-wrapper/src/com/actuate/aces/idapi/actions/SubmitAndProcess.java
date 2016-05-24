@@ -55,22 +55,23 @@ public class SubmitAndProcess extends BaseController {
 		}
 
 		JobScheduler jobScheduler = new JobScheduler(this);
-		String jobId = jobScheduler.scheduleJob(jobName, executableName, outputName, outputFormat, params);
-		JobState jobState = new JobState(jobScheduler);
-		String state = jobState.pollJobStateCompleteString(jobId, pollSeconds, pollRetryAttempts);
-		if (state == null) {
-			return false;
-		} else if (state.equals("Succeeded")) {
-			Downloader downloader = new Downloader(jobState);
-			needsReset = true;
-			try {
+		jobScheduler.setParameters(params);
+		try {
+			String jobId = jobScheduler.scheduleJob(jobName, executableName, outputName, outputFormat);
+			JobState jobState = new JobState(jobScheduler);
+			String state = jobState.pollJobStateCompleteString(jobId, pollSeconds, pollRetryAttempts);
+			if (state == null) {
+				return false;
+			} else if (state.equals("Succeeded")) {
+				Downloader downloader = new Downloader(jobState);
+				needsReset = true;
 				downloader.downloadToFile(outputName, downloadFileName);
-			} catch (IOException e) {
-				e.printStackTrace();
+				return true;
+			} else {
 				return false;
 			}
-			return true;
-		} else {
+		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -82,22 +83,23 @@ public class SubmitAndProcess extends BaseController {
 		}
 
 		JobScheduler jobScheduler = new JobScheduler(this);
-		String jobId = jobScheduler.scheduleJob(jobName, executableName, outputName, null, params);
-		JobState jobState = new JobState(jobScheduler);
-		String state = jobState.pollJobStateCompleteString(jobId, pollSeconds, pollRetryAttempts);
-		if (state == null) {
-			return false;
-		} else if (state.equals("Succeeded")) {
-			ReportViewer reportViewer = new ReportViewer(jobState);
-			needsReset = true;
-			try {
+		jobScheduler.setParameters(params);
+		try {
+			String jobId = jobScheduler.scheduleJob(jobName, executableName, outputName);
+			JobState jobState = new JobState(jobScheduler);
+			String state = jobState.pollJobStateCompleteString(jobId, pollSeconds, pollRetryAttempts);
+			if (state == null) {
+				return false;
+			} else if (state.equals("Succeeded")) {
+				ReportViewer reportViewer = new ReportViewer(jobState);
+				needsReset = true;
 				reportViewer.viewToFile(outputName, viewFormat, viewFileName);
-			} catch (IOException e) {
-				e.printStackTrace();
+				return true;
+			} else {
 				return false;
 			}
-			return true;
-		} else {
+		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -109,22 +111,23 @@ public class SubmitAndProcess extends BaseController {
 		}
 
 		JobScheduler jobScheduler = new JobScheduler(this);
-		String jobId = jobScheduler.scheduleJob(jobName, executableName, outputName, null, params);
-		JobState jobState = new JobState(jobScheduler);
-		String state = jobState.pollJobStateCompleteString(jobId, pollSeconds, pollRetryAttempts);
-		if (state == null) {
-			return false;
-		} else if (state.equals("Succeeded")) {
-			BIRTContentViewer birtContentViewer = new BIRTContentViewer(jobState);
-			needsReset = true;
-			try {
+		jobScheduler.setParameters(params);
+		try {
+			String jobId = jobScheduler.scheduleJob(jobName, executableName, outputName);
+			JobState jobState = new JobState(jobScheduler);
+			String state = jobState.pollJobStateCompleteString(jobId, pollSeconds, pollRetryAttempts);
+			if (state == null) {
+				return false;
+			} else if (state.equals("Succeeded")) {
+				BIRTContentViewer birtContentViewer = new BIRTContentViewer(jobState);
+				needsReset = true;
 				birtContentViewer.viewToFile(outputName, viewFormat, viewFileName);
-			} catch (IOException e) {
-				e.printStackTrace();
+				return true;
+			} else {
 				return false;
 			}
-			return true;
-		} else {
+		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 	}

@@ -18,15 +18,17 @@ public class IdapiUploader extends IdapiAntTask {
     private String authId;
     private String sourceFile;
     private String destinationFile;
+    private String volume;
     private boolean replaceExisting = false;
 
     public void execute() throws BuildException {
-        if (serverUrl == null || authId == null || sourceFile == null || destinationFile == null) {
+        if (serverUrl == null || authId == null || sourceFile == null || destinationFile == null || volume == null) {
             throw new BuildException(getUsage());
         }
         try {
-            Uploader uploader = new Uploader(serverUrl, authId);
-            uploader.uploadFile(sourceFile, destinationFile, replaceExisting);
+            Uploader uploader = new Uploader(serverUrl, authId, volume);
+            uploader.setReplaceExisting(replaceExisting);
+            uploader.uploadFile(sourceFile, destinationFile);
 
             ArrayOfPermission aop = getArrayOfPermissions();
             if (aop != null) {
@@ -43,6 +45,10 @@ public class IdapiUploader extends IdapiAntTask {
         }
     }
 
+    public void setVolume(String volume) {
+    	this.volume = volume;
+    }
+    
     public void setServerUrl(String serverUrl) {
         this.serverUrl = serverUrl;
     }
@@ -65,11 +71,12 @@ public class IdapiUploader extends IdapiAntTask {
 
     private String getUsage(){
         return NL + NL +
-                "USAGE ERROR:  IdapiUploader requires AuthId, ServerUrl, " + NL +
+                "USAGE ERROR:  IdapiUploader requires AuthId, Volume, ServerUrl, " + NL +
                 "              SourceFile, DestinationFile attributes." + NL +
                 "Optional attributes are UserPermissions, RolePermissions and ReplaceExisting." + NL +
                 "Example:" + NL +
                 "\t<IdapiUploader AuthId=\"${AuthId}\" " + NL +
+                "\t               Volume=\"${volume}\" " + NL +
                 "\t               ServerUrl=\"${ServerUrl}\" " + NL +
                 "\t               SourceFile=\"C:/my directory/My Report.rptdesign\" " + NL +
                 "\t               DestinationFile=\"/Public/My Report.rptdesign\" " + NL +

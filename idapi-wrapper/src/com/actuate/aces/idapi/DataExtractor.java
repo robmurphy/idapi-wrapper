@@ -168,6 +168,7 @@ public class DataExtractor extends BaseController {
 			e.printStackTrace();
 			return null;
 		}
+		fileOutputStream.close();
 		return file;
 	}
 

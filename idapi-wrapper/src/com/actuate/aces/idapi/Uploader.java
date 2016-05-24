@@ -27,6 +27,10 @@ public class Uploader extends BaseController {
 	public Uploader(String host, String authenticationId) throws MalformedURLException, ServiceException {
 		super(host, authenticationId);
 	}
+	
+	public Uploader(String host, String authenticationId, String volume) throws MalformedURLException, ServiceException {
+		super(host, authenticationId, volume);
+	}
 
 	public Uploader(String host, String username, String password, String volume) throws ServiceException, ActuateException, MalformedURLException {
 		super(host, username, password, volume);
@@ -40,31 +44,19 @@ public class Uploader extends BaseController {
 		return upload(getFileBytes(file), detination);
 	}
 
-	public String uploadFile(File file, String detination, boolean replaceExisting) throws IOException {
-		return upload(getFileBytes(file), detination, replaceExisting);
-	}
-
 	public String uploadFile(String fileName, String destination) throws IOException {
-		return upload(getFileBytes(fileName), destination, true);
-	}
-
-	public String uploadFile(String fileName, String destination, boolean replaceExisting) throws IOException {
-		return upload(getFileBytes(fileName), destination, replaceExisting);
+		return upload(getFileBytes(fileName), destination);
 	}
 
 	public String upload(String sourceData, String detination) throws IOException {
-		return upload(sourceData.getBytes(), detination, true);
+		return upload(sourceData.getBytes(), detination);
 	}
 
 	public String upload(InputStream inputStream, String destination) throws IOException {
-		return upload(getStreamBytes(inputStream), destination, true);
+		return upload(getStreamBytes(inputStream), destination);
 	}
 
 	public String upload(byte[] source, String destination) throws IOException {
-		return upload(source, destination, true);
-	}
-
-	public String upload(byte[] source, String destination, boolean replaceExisting) throws IOException {
 		String contentId = destination.substring(destination.lastIndexOf("/"));
 		String contentType = "application/octect.stream";
 
@@ -75,11 +67,7 @@ public class Uploader extends BaseController {
 
 		acxControl.proxy.addAttachment(attachmentPart);
 
-		NewFile newFile = new NewFile();
-		newFile.setName(destination);
-		newFile.setReplaceExisting(replaceExisting);
-		if (permissions != null)
-			newFile.setACL(permissions);
+		NewFile newFile = getNewFile(destination);
 
 		Attachment attachment = new Attachment();
 		attachment.setContentId(contentId);

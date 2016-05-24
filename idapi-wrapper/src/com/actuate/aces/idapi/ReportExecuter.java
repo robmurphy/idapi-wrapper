@@ -42,18 +42,14 @@ public class ReportExecuter extends BaseController {
 	}
 
 	public String executeReport(String reportName) {
-		return executeReport(reportName, null, null, ExecuteReportStatus.Done);
+		return executeReport(reportName, null,  ExecuteReportStatus.Done);
 	}
 
 	public String executeReport(String reportName, String outputName) {
-		return executeReport(reportName, outputName, null, ExecuteReportStatus.Done);
+		return executeReport(reportName, outputName,  ExecuteReportStatus.Done);
 	}
 
-	public String executeReport(String reportName, String outputName, HashMap<String, String> parameters) {
-		return executeReport(reportName, outputName, parameters, ExecuteReportStatus.Done);
-	}
-
-	public String executeReport(String reportName, String outputName, HashMap<String, String> parameters, ExecuteReportStatus statusWait) {
+	public String executeReport(String reportName, String outputName, ExecuteReportStatus statusWait) {
 		lastStatus = ExecuteReportStatus.Pending;
 
 		ExecuteReport executeReport = new ExecuteReport();

@@ -36,6 +36,7 @@ public class FolderCreator extends BaseController {
 		CreateFolder createFolder = new CreateFolder();
 		createFolder.setFolderName(name);
 		createFolder.setWorkingFolderName(baseFolder);
+		createFolder.setIgnoreDup(true);
 
 		AdminOperation[] adminOperations = new AdminOperation[permissions == null ? 1 : 2];
 		adminOperations[0] = new AdminOperation();

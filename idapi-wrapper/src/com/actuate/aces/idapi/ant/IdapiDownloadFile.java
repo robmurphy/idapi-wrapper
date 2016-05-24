@@ -17,14 +17,15 @@ public class IdapiDownloadFile extends IdapiAntTask {
     private String authId;
     private String sourceFile;
     private String destinationFile;
+    private String volume;
 
     public void execute() throws BuildException {
-        if (serverUrl == null || authId == null || sourceFile == null || destinationFile == null) {
+        if (serverUrl == null || authId == null || sourceFile == null || destinationFile == null || volume == null) {
             throw new BuildException(getUsage());
         }
         Downloader downloader;
         try {
-            downloader = new Downloader(serverUrl, authId);
+            downloader = new Downloader(serverUrl, authId, volume);
             downloader.downloadToFile(sourceFile, destinationFile);
         } catch (MalformedURLException e) {
             throw new BuildException(e);
@@ -35,6 +36,10 @@ public class IdapiDownloadFile extends IdapiAntTask {
         }
     }
 
+    public void setVolume(String volume) {
+    	this.volume = volume;
+    }
+    
     public void setServerUrl(String serverUrl) {
         this.serverUrl = serverUrl;
     }
@@ -53,10 +58,11 @@ public class IdapiDownloadFile extends IdapiAntTask {
 
     private String getUsage(){
         return NL + NL +
-                "USAGE ERROR:  IdapiDownloadFile required AuthId, ServerUrl, " + NL +
+                "USAGE ERROR:  IdapiDownloadFile required Volume, AuthId, ServerUrl, " + NL +
                 "              SourceFile, DestinationFile attributes." + NL +
                 "Example:" + NL +
                 "\t<IdapiDownloadFile AuthId=\"${AuthId}\" " + NL +
+                "\t                   Volume=\"${vol}\" " + NL +
                 "\t                   ServerUrl=\"${ServerUrl}\" " + NL +
                 "\t                   SourceFile=\"/Home/user/My Report.rptdesign\" " + NL +
                 "\t                   DestinationFile=\"C:/MyFolder/My Report.rptdesign\" />";

@@ -104,6 +104,12 @@ public class PermissionSetter extends BaseController {
 		updateFile = new UpdateFile();
 		updateFile.setWorkingFolderName(folder);
 		updateFile.setRecursive(true);
+		FileCondition fileCondition = new FileCondition();
+		fileCondition.setField(FileField.Name);
+		fileCondition.setMatch("*");
+		FileSearch fileSearch = new FileSearch();
+		fileSearch.setCondition(fileCondition);
+		updateFile.setSearch(fileSearch);
 		updateFile.setUpdateFileOperationGroup(updateFileOperationGroup);
 
 		adminOperations[1] = new AdminOperation();
