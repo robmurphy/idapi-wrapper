@@ -1,0 +1,61 @@
+<!--
+  ~ Copyright (c) 2014 Actuate Corporation
+  -->
+
+<volume-upload-model>
+    <filters includeAllFolders="true">
+        <include-filters>
+            <include-filter>*.rptdesign</include-filter>
+            <include-filter>*.rptdocument</include-filter>
+        </include-filters>
+        <exclude-filters>
+            <exclude-filter>.svn</exclude-filter>
+            <exclude-filter>.git</exclude-filter>
+            <exclude-filter>.project</exclude-filter>
+            <exclude-filter>.classpath</exclude-filter>
+            <exclude-filter>.settings</exclude-filter>
+            <exclude-filter>*.html</exclude-filter>
+        </exclude-filters>
+    </filters>
+
+    <permission-rules>
+        <permission-rule name="PermRule">
+            <permissions>
+                <permission user="demo" rights="VREWG"/>
+                <permission role="jnj" rights="VREW"/>
+            </permissions>
+        </permission-rule>
+        <permission-rule name="OtherPermRule">
+            <permissions>
+                <permission user="demo" rights="VREWG"/>
+                <permission role="jnj" rights="VRE"/>
+            </permissions>
+        </permission-rule>
+    </permission-rules>
+
+    <folder-rules>
+        <folder-rule name="/" ignore="false" cascadePermissions="true">
+            <permissions>
+                <permission role="All" rights="VREW"/>
+                <permission user="User1" rights="VRE"/>
+            </permissions>
+        </folder-rule>
+        <folder-rule name="/Resources" ignore="false" cascadePermissions="true" permissionRules="PermRule">
+            <permissions>
+                <permission role="All" rights="VRE"/>
+                <permission user="User1" rights=""/>
+            </permissions>
+        </folder-rule>
+    </folder-rules>
+
+    <file-rules>
+        <file-rule name="/App Context.rptdesign" permissionRules="PermRule,OtherPermRule"/>
+        <file-rule name="/ACL.rptdesign">
+            <permissions>
+                <permission user="demo" rights="VREWG"/>
+                <permission user="jnj" rights="VREWG"/>
+            </permissions>
+        </file-rule>
+        <file-rule name="/Test.rptdesign" ignore="true"/>
+    </file-rules>
+</volume-upload-model>
