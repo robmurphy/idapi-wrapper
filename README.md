@@ -9,14 +9,14 @@ Sample Execute a Report
 
 ```Java
 ReportExecuter reportExecuter = new ReportExecuter("http://localhost:8000", "Administrator", "password", "Default Volume");
-String id = reportExecuter.executeReport("/My Report.rptdesign", "/My Output.rptdocument");
+String id = reportExecuter.executeReport("/My Report.rptdesign", "/My Output.RPTDOCUMENT");
 ```
 
 Sample Convert to PDF and download report output (use previously created reportExecuter to chain constructors, maintain AuthId)
 
 ```Java
 BIRTContentViewer birtContentViewer = new BIRTContentViewer(reportExecuter);
-birtContentViewer.viewToFile("/My Output.rptdocument", "PDF", "Sample Output.pdf");
+birtContentViewer.viewToFile("/My Output.RPTDOCUMENT", "PDF", "Sample Output.pdf");
 ```
 
 ## Motivation
