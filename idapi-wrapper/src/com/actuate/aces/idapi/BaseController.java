@@ -6,10 +6,8 @@ package com.actuate.aces.idapi;
 
 import com.actuate.aces.idapi.control.ActuateException;
 import com.actuate.aces.idapi.control.AcxControl;
-import com.actuate.schemas.ArrayOfPermission;
-import com.actuate.schemas.NameValuePair;
-import com.actuate.schemas.NewFile;
-import com.actuate.schemas.Permission;
+import com.actuate.schemas.*;
+
 
 import javax.xml.rpc.ServiceException;
 import java.net.MalformedURLException;
@@ -195,5 +193,9 @@ public abstract class BaseController {
 		if (permissions != null)
 			newFile.setACL(permissions);
 		return newFile;
+	}
+
+	public void setLocale(String locale) {
+		this.acxControl.setLocale(locale);
 	}
 }
