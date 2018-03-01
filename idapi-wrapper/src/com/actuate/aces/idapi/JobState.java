@@ -80,6 +80,33 @@ public class JobState extends BaseController {
 			return state.toString();
 	}
 
+	public JobPropertiesState pollJobState(String jobId, int pollSeconds, int maxAttempts) {
+		JobPropertiesState state = null;
+
+		for (int i = 0; i < maxAttempts; i++) {
+			state = getJobState(jobId);
+			if (state.equals(JobPropertiesState.Cancelled) || state.equals(JobPropertiesState.Expired) || state.equals(JobPropertiesState.Failed) || state.equals(JobPropertiesState.Succeeded))
+				return state;
+
+			try {
+				Thread.sleep(pollSeconds * 1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		return state;
+	}
+
+	public String pollJobStateString(String jobId, int pollSeconds, int maxAttempts) {
+		JobPropertiesState state = pollJobState(jobId, pollSeconds, maxAttempts);
+		if (state == null)
+			return null;
+		else
+			return state.toString();
+	}
+
+
 	public JobPropertiesState pollJobStateComplete(String jobId, int pollSeconds, int maxAttempts) {
 		for (int i = 0; i < maxAttempts; i++) {
 			JobPropertiesState state = getJobState(jobId);
