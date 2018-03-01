@@ -109,12 +109,16 @@ public abstract class BaseController {
 		this.permissions = permissions;
 	}
 
-	public void addPermission(String user, String group, String accessRight) {
+	public void addPermission(String user, String group, String role, String accessRight) {
 		Permission permission = new Permission();
 		if (user != null)
 			permission.setUserName(user);
 		if (group != null && user == null)
 			permission.setUserGroupName(group);
+
+		if (role != null && user == null)
+			permission.setRoleName(role);
+
 		permission.setAccessRight(accessRight);
 
 		if (permissions == null) {
