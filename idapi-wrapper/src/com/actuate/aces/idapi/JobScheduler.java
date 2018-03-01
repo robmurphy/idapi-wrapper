@@ -42,6 +42,9 @@ public class JobScheduler extends BaseController {
 	public String scheduleJob(String jobName, String executableName, String outputName, String outputFormat, Object scheduleTime) throws RemoteException {
 
 		SubmitJob submitJob = new SubmitJob();
+		if(jobName.length() >= 100){
+			jobName = jobName.substring(0,99);
+		}
 		submitJob.setJobName(jobName);
 		submitJob.setOperation(SubmitJobOperation.RunReport);
 		submitJob.setInputFileName(executableName);
