@@ -6,10 +6,7 @@ package com.actuate.aces.idapi;
 
 import com.actuate.aces.idapi.control.ActuateException;
 import com.actuate.aces.idapi.control.AcxControl;
-import com.actuate.schemas.ArrayOfPermission;
-import com.actuate.schemas.NameValuePair;
-import com.actuate.schemas.NewFile;
-import com.actuate.schemas.Permission;
+import com.actuate.schemas.*;
 
 import javax.xml.rpc.ServiceException;
 import java.net.MalformedURLException;
@@ -25,6 +22,7 @@ public abstract class BaseController {
 	protected boolean replaceExisting = false;
 	protected String newVersionName;
 	protected HashMap<String, String> parameters;
+	protected Integer priority;
 
 	public BaseController(BaseController controller) {
 		this.acxControl = controller.getAcxControl();
@@ -195,5 +193,19 @@ public abstract class BaseController {
 		if (permissions != null)
 			newFile.setACL(permissions);
 		return newFile;
+	}
+
+	public int getPriority() {
+		return priority;
+	}
+
+	/**
+	 * Set job priority [1-1000] (1000:= high)
+	 * @param priority
+	 */
+	public void setPriority(int priority) {
+		if( priority >= 1 && priority <= 1000) {
+			this.priority = priority;
+		}
 	}
 }

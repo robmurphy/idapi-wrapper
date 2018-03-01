@@ -45,8 +45,9 @@ public class JobScheduler extends BaseController {
 		submitJob.setJobName(jobName);
 		submitJob.setOperation(SubmitJobOperation.RunReport);
 		submitJob.setInputFileName(executableName);
-
-		
+		if (priority != null) {
+			submitJob.setPriority(priority);
+		}
 		NewFile newFile = getNewFile( outputName );
 		submitJob.setRequestedOutputFile(newFile);
 
