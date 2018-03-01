@@ -12,6 +12,7 @@ import java.net.MalformedURLException;
 import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Vector;
 
 public class JobScheduler extends BaseController {
 
@@ -60,16 +61,26 @@ public class JobScheduler extends BaseController {
 			submitJob.setConversionOptions(conversionOptions);
 		}
 
+
 		if (parameters != null && parameters.size() > 0) {
-			ParameterValue[] parameterValues = new ParameterValue[parameters.size()];
-			int i = 0;
+
+
+			Vector<ParameterValue> parameterValues = new Vector<>(); //
+			// ParameterValue[parameters.size()];
 			for (Map.Entry<String, String> entry : parameters.entrySet()) {
-				parameterValues[i] = new ParameterValue();
-				parameterValues[i].setName(entry.getKey());
-				parameterValues[i].setValue(entry.getValue());
-				i++;
+
+				if(entry.getValue() == null ||"null".equals(entry.getValue())){
+					 continue;
+				}
+				ParameterValue newValue = new ParameterValue();
+				newValue.setName(entry.getKey());
+				newValue.setValue(entry.getValue());
+				parameterValues.add(newValue);
+
+
 			}
-			submitJob.setParameterValues(new ArrayOfParameterValue(parameterValues));
+
+			submitJob.setParameterValues(new ArrayOfParameterValue(parameterValues.toArray( new ParameterValue[parameterValues.size()])));
 		}
 
 		if (scheduleTime != null) {
