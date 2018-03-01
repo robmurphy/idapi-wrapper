@@ -108,4 +108,23 @@ public class JobScheduler extends BaseController {
 
 		return response.getJobId();
 	}
+
+	public void setPDFOptions(String pageRange,Boolean bidiProcessing,Boolean textWrapping, Boolean hyphenation, Boolean fontSubstitution, String pageStyle, Boolean embeddedFonts, Integer chartDpi, Boolean renderChartInSVG, Boolean repaginateForPDF ){
+		if(parameters == null) {
+			parameters = new HashMap<String, String>();
+		}
+		parameters.put("$$$AC_CONVERSION_OPTION_rptdesign_PDF_PageRange",pageRange != null? pageRange.toString() : null);
+		parameters.put("$$$AC_CONVERSION_OPTION_rptdesign_PDF_pdfRenderOption.bidiProcessing",bidiProcessing != null? bidiProcessing.toString() : null);
+		parameters.put("$$$AC_CONVERSION_OPTION_rptdesign_PDF_pdfRenderOption.textWrapping",textWrapping != null? textWrapping.toString() : null);
+		parameters.put("$$$AC_CONVERSION_OPTION_rptdesign_PDF_pdfRenderOption.hyphenation",hyphenation != null? hyphenation.toString() : null);
+		parameters.put("$$$AC_CONVERSION_OPTION_rptdesign_PDF_pdfRenderOption.fontSubstitution",fontSubstitution != null? fontSubstitution.toString() : null);
+		parameters.put("$$$AC_CONVERSION_OPTION_rptdesign_PDF_PageStyle",pageStyle != null? pageStyle.toString() : null);
+		parameters.put("$$$AC_CONVERSION_OPTION_rptdesign_PDF_pdfRenderOption.embeddedFonts",embeddedFonts != null? embeddedFonts.toString() : null);
+		parameters.put("$$$AC_CONVERSION_OPTION_rptdesign_PDF_ChartDpi",chartDpi != null? chartDpi.toString() : null);
+		parameters.put("$$$AC_CONVERSION_OPTION_rptdesign_PDF_RenderChartInSVG",renderChartInSVG != null? renderChartInSVG.toString() : null);
+		parameters.put("$$$AC_CONVERSION_OPTION_rptdesign_PDF_repaginateForPDF",repaginateForPDF != null? repaginateForPDF.toString() : null);
+
+	}
+
+
 }
