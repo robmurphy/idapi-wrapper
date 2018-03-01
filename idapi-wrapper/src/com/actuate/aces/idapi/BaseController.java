@@ -6,10 +6,8 @@ package com.actuate.aces.idapi;
 
 import com.actuate.aces.idapi.control.ActuateException;
 import com.actuate.aces.idapi.control.AcxControl;
-import com.actuate.schemas.ArrayOfPermission;
-import com.actuate.schemas.NameValuePair;
-import com.actuate.schemas.NewFile;
-import com.actuate.schemas.Permission;
+import com.actuate.schemas.*;
+
 
 import javax.xml.rpc.ServiceException;
 import java.net.MalformedURLException;
@@ -111,12 +109,16 @@ public abstract class BaseController {
 		this.permissions = permissions;
 	}
 
-	public void addPermission(String user, String group, String accessRight) {
+	public void addPermission(String user, String group, String role, String accessRight) {
 		Permission permission = new Permission();
 		if (user != null)
 			permission.setUserName(user);
 		if (group != null && user == null)
 			permission.setUserGroupName(group);
+
+		if (role != null && user == null)
+			permission.setRoleName(role);
+
 		permission.setAccessRight(accessRight);
 
 		if (permissions == null) {
@@ -195,5 +197,9 @@ public abstract class BaseController {
 		if (permissions != null)
 			newFile.setACL(permissions);
 		return newFile;
+	}
+
+	public void setLocale(String locale) {
+		this.acxControl.setLocale(locale);
 	}
 }
