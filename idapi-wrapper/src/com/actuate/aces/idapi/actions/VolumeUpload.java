@@ -23,8 +23,7 @@ import java.util.List;
 
 public class VolumeUpload extends BaseController {
 
-	private VolumeUploadModel model;
-	private ListFilesFilter listFilesFilter;
+    private ListFilesFilter listFilesFilter;
 
 	public VolumeUpload(BaseController controller) {
 		super(controller);
@@ -63,7 +62,7 @@ public class VolumeUpload extends BaseController {
 	}
 
 	public boolean upload(String sourcePath, String targetPath, VolumeUploadModel model, boolean deleteFirst) throws IOException {
-		this.model = model;
+        VolumeUploadModel model1 = model;
 		this.listFilesFilter = new ListFilesFilter(model.getFilters());
 
 		boolean retVal = true;
